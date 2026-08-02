@@ -1,149 +1,142 @@
-// Playwright smoke test for Dr. Gabriel Galeb site (v2 — luxury minimal)
+/**
+ * Smoke test for the rebuilt Galeb site.
+ * SITE_URL=http://127.0.0.1:8899 node e2e/smoke.mjs
+ */
 import { chromium } from 'playwright';
-import fs from 'fs';
+import fs from 'node:fs';
 
-const URL = process.env.SITE_URL || 'https://gabriel-galeb-site.onrender.com';
-const OUT = '/workspace/GABRIEL-Site/e2e/artifacts';
+const BASE = process.env.SITE_URL || 'http://127.0.0.1:8899';
+const OUT = new URL('./artifacts/', import.meta.url).pathname;
 fs.mkdirSync(OUT, { recursive: true });
 
-const results = { ok: true, errors: [], checks: {} };
-const log = (k, v, ok = true) => { results.checks[k] = { ok, value: v }; if (!ok) results.ok = false; };
+const results = { ok: true, checks: {}, errors: [] };
+const log = (k, v, ok = true) => {
+  results.checks[k] = { ok, value: v };
+  if (!ok) {
+    results.ok = false;
+    results.errors.push(`${k}: ${JSON.stringify(v)}`);
+  }
+};
 
-const browser = await chromium.launch({
-  executablePath: '/root/.cache/ms-playwright/chromium-1223/chrome-linux/chrome',
-  headless: true,
-  args: ['--no-sandbox', '--disable-setuid-sandbox'],
-});
-const ctx = await browser.newContext({
-  viewport: { width: 1440, height: 900 },
-  userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36',
-});
+const browser = await chromium.launch({ headless: true });
+const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
 const page = await ctx.newPage();
 
 const consoleErrors = [];
 const failedRequests = [];
-page.on('console', (msg) => { if (msg.type() === 'error') consoleErrors.push(msg.text().slice(0, 200)); });
-page.on('requestfailed', (req) => failedRequests.push(`${req.failure()?.errorText} ${req.url()}`));
-page.on('response', (resp) => { if (resp.status() >= 400) failedRequests.push(`HTTP ${resp.status()} ${resp.url()}`); });
+page.on('console', (msg) => {
+  if (msg.type() === 'error') consoleErrors.push(msg.text().slice(0, 220));
+});
+page.on('response', (resp) => {
+  if (resp.status() >= 400 && !resp.url().includes('favicon')) {
+    failedRequests.push(`HTTP ${resp.status()} ${resp.url()}`);
+  }
+});
 
-console.log('▶ Navigating to', URL);
-const resp = await page.goto(URL + '?cb=' + Date.now(), { waitUntil: 'networkidle', timeout: 30000 });
-log('http_status', resp.status(), resp.status() === 200);
-await page.waitForLoadState('networkidle');
-await page.waitForTimeout(1500);
+console.log('▶', BASE);
+const resp = await page.goto(BASE + '/?cb=' + Date.now(), { waitUntil: 'networkidle', timeout: 45000 });
+log('home_http', resp.status(), resp.status() === 200);
 
-// Basic meta
 const title = await page.title();
-log('title_present', title.length > 10 && title.includes('Gabriel Galeb'));
-log('title_text', title);
+log('title', title, /Gabriel Galeb/i.test(title) && /Transplante Capilar/i.test(title));
+
 const metaDesc = await page.getAttribute('meta[name="description"]', 'content');
-log('meta_description', (metaDesc || '').length > 50);
+log('meta_description', (metaDesc || '').length, (metaDesc || '').length >= 80);
+
 const canonical = await page.getAttribute('link[rel="canonical"]', 'href');
-log('canonical', !!canonical);
+log('canonical', canonical, canonical === 'https://www.drgabrielgaleb.com.br/');
 
-// Structured data
-const jsonLdCount = await page.locator('script[type="application/ld+json"]').count();
-log('json_ld_blocks', jsonLdCount, jsonLdCount >= 1);
-const ldText = await page.locator('script[type="application/ld+json"]').first().textContent();
+const ld = await page.locator('script[type="application/ld+json"]').first().textContent();
+let graph = [];
 try {
-  const parsed = JSON.parse(ldText);
+  graph = JSON.parse(ld)['@graph'] || [];
   log('json_ld_parses', true);
-  log('json_ld_physician', !!parsed['@graph']?.find(n => n['@type']?.includes('Physician')));
-  log('json_ld_faqpage', !!parsed['@graph']?.find(n => n['@type'] === 'FAQPage'));
 } catch (e) {
-  log('json_ld_parses', false);
-  results.errors.push('JSON-LD parse error: ' + e.message);
+  log('json_ld_parses', e.message, false);
 }
+const types = graph.flatMap((n) => (Array.isArray(n['@type']) ? n['@type'] : [n['@type']]));
+log('schema_clinic', types, types.includes('MedicalClinic') || types.includes('MedicalBusiness'));
+log('schema_physician', types, types.includes('Physician'));
+log('schema_faq', types, types.includes('FAQPage'));
+log('no_self_rating', !JSON.stringify(graph).includes('aggregateRating'), !JSON.stringify(graph).includes('aggregateRating'));
 
-// Sections
-const sections = ['.topbar', '.nav', '.hero', '#sobre', '#solucoes', '#processo', '#resultados', '#depoimentos', '#faq', '#contato', 'footer'];
-for (const sel of sections) {
+for (const sel of ['.topbar', '.masthead', '.hero', '#tratamentos', '#resultados', '#jornada', '#duvidas', '#contato', 'footer', '.fab']) {
   const visible = await page.locator(sel).first().isVisible().catch(() => false);
-  log(`section:${sel}`, visible, visible);
+  log(`visible:${sel}`, visible, visible);
 }
 
-// WhatsApp CTAs
-const waLinks = await page.locator('a[href*="wa.me"]').count();
-log('whatsapp_cta_count', waLinks, waLinks >= 3);
+const wa = await page.locator('a[href*="wa.me"]').count();
+log('whatsapp_ctas', wa, wa >= 3);
 
-// Floating WhatsApp button — KEY CHECK (now dark with gold border)
-const fabPos = await page.locator('.fab-wa').evaluate(el => getComputedStyle(el).position);
-const fabBg = await page.locator('.fab-wa').evaluate(el => getComputedStyle(el).backgroundColor);
-const fabBorder = await page.locator('.fab-wa').evaluate(el => getComputedStyle(el).border);
-log('fab_wa_position_fixed', fabPos === 'fixed', fabPos === 'fixed');
-log('fab_wa_dark_with_gold_border', fabBg === 'rgb(11, 11, 15)' && fabBorder.includes('184, 150, 62'), fabBg === 'rgb(11, 11, 15)' && fabBorder.includes('184, 150, 62'));
+const cases = await page.locator('.case').count();
+log('home_cases', cases, cases >= 3);
 
-// Hero text
-const heroH1 = await page.locator('.hero h1').first().textContent();
-log('hero_h1', heroH1.replace(/\s+/g, ' ').trim().slice(0, 80), heroH1.includes('restauração'));
+const bodyBg = await page.locator('body').evaluate((el) => getComputedStyle(el).backgroundColor);
+log('body_bone', bodyBg, bodyBg === 'rgb(250, 247, 241)');
 
-// Quiet luxury palette checks
-const bodyBg = await page.locator('body').evaluate(el => getComputedStyle(el).backgroundColor);
-log('body_near_black', bodyBg === 'rgb(11, 11, 15)', bodyBg === 'rgb(11, 11, 15)');
-const btnGold = await page.locator('.btn-gold').first().evaluate(el => getComputedStyle(el).backgroundColor);
-log('btn_gold_amber', btnGold === 'rgb(184, 150, 62)', btnGold === 'rgb(184, 150, 62)');
-const serifFont = await page.locator('.hero h1').evaluate(el => getComputedStyle(el).fontFamily);
-log('serif_font', serifFont.toLowerCase().includes('cormorant') || serifFont.toLowerCase().includes('garamond'), serifFont.toLowerCase().includes('cormorant') || serifFont.toLowerCase().includes('garamond'));
+const heroBg = await page.locator('.hero').evaluate((el) => getComputedStyle(el).backgroundColor);
+log('hero_ink', heroBg, heroBg === 'rgb(10, 13, 24)');
 
-// Service cards count
-const serviceCount = await page.locator('.service-card').count();
-log('service_cards', serviceCount, serviceCount === 3);
+const goldBtn = await page.locator('.btn').first().evaluate((el) => getComputedStyle(el).backgroundColor);
+log('btn_gold', goldBtn, goldBtn === 'rgb(201, 169, 97)');
 
-// Gallery items
-const galleryCount = await page.locator('.gallery-item').count();
-log('gallery_items', galleryCount, galleryCount === 6);
+const serif = await page.locator('.hero h1').evaluate((el) => getComputedStyle(el).fontFamily);
+log('display_font', serif, /cormorant/i.test(serif));
 
-// Testimonials
-const tCount = await page.locator('.t-card').count();
-log('testimonials', tCount, tCount === 3);
+const portrait = await page.locator('.portrait__frame img').evaluate((img) => ({
+  w: img.naturalWidth,
+  complete: img.complete,
+  src: img.currentSrc,
+}));
+log('portrait_loaded', portrait, portrait.complete && portrait.w > 200);
 
-// FAQ toggleable
-await page.locator('.faq-item summary').first().click();
-await page.waitForTimeout(300);
-const faqOpen = await page.locator('.faq-item[open]').count();
-log('faq_toggleable', faqOpen, faqOpen >= 1);
+await page.locator('.faq summary').first().click();
+await page.waitForTimeout(200);
+log('faq_opens', await page.locator('.faq details[open]').count(), (await page.locator('.faq details[open]').count()) >= 1);
 
-// Mobile
-await page.setViewportSize({ width: 375, height: 812 });
-await page.reload({ waitUntil: 'networkidle' });
-await page.waitForFunction(() => document.getElementById('menuToggle') !== null, { timeout: 5000 });
-await page.waitForTimeout(800);
-const mobileHamburger = await page.locator('#menuToggle').isVisible();
-log('mobile_menu_visible', mobileHamburger, mobileHamburger);
-if (mobileHamburger) {
-  await page.locator('#menuToggle').click();
-  await page.waitForTimeout(500);
-  const menuHasOpen = await page.evaluate(() => document.getElementById('navLinks').classList.contains('open'));
-  log('mobile_menu_opens', menuHasOpen, menuHasOpen);
+// Sub-pages
+for (const path of ['/sobre/', '/transplante-capilar-fue/', '/mmp-capilar/', '/resultados/']) {
+  const r = await page.goto(BASE + path, { waitUntil: 'networkidle', timeout: 30000 });
+  log(`page:${path}`, r.status(), r.status() === 200);
+  const h1 = (await page.locator('h1').first().textContent()) || '';
+  log(`h1:${path}`, h1.trim().slice(0, 60), h1.trim().length > 5);
+  const can = await page.getAttribute('link[rel="canonical"]', 'href');
+  log(`canonical:${path}`, can, can === `https://www.drgabrielgaleb.com.br${path}`);
 }
 
-// Take screenshots
+// Mobile menu
+await page.goto(BASE + '/', { waitUntil: 'networkidle' });
+await page.setViewportSize({ width: 390, height: 844 });
+await page.waitForTimeout(400);
+const burgerVisible = await page.locator('#burger').isVisible();
+log('mobile_burger', burgerVisible, burgerVisible);
+if (burgerVisible) {
+  await page.locator('#burger').click();
+  await page.waitForTimeout(350);
+  const open = await page.locator('#nav').evaluate((el) => el.dataset.open === 'true');
+  log('mobile_nav_opens', open, open);
+}
+
 await page.setViewportSize({ width: 1440, height: 900 });
-await page.goto(URL + '?cb=' + Date.now(), { waitUntil: 'networkidle' });
-await page.waitForTimeout(2000);
+await page.goto(BASE + '/', { waitUntil: 'networkidle' });
 await page.evaluate(() => window.scrollTo(0, 0));
-await page.waitForTimeout(500);
-await page.screenshot({ path: `${OUT}/v2-final-hero.png` });
-for (const s of ['sobre', 'servicos', 'processo', 'resultados', 'faq', 'contato']) {
-  await page.evaluate((sel) => document.getElementById(sel)?.scrollIntoView({ block: 'start' }), s);
-  await page.waitForTimeout(800);
-  await page.screenshot({ path: `${OUT}/v2-final-${s}.png` });
-}
+await page.waitForTimeout(400);
+await page.screenshot({ path: `${OUT}/home-hero.png` });
+await page.goto(BASE + '/resultados/', { waitUntil: 'networkidle' });
+await page.screenshot({ path: `${OUT}/resultados.png`, fullPage: false });
 
 await browser.close();
 
-log('console_errors', consoleErrors.length, consoleErrors.length === 0);
-log('failed_requests', failedRequests.length, failedRequests.length === 0);
-results.consoleErrors = consoleErrors;
-results.failedRequests = failedRequests;
+log('console_errors', consoleErrors, consoleErrors.length === 0);
+log('failed_requests', failedRequests, failedRequests.length === 0);
 
-console.log('\n========== V2 SMOKE TEST RESULTS ==========');
-const failed = Object.entries(results.checks).filter(([k, v]) => !v.ok);
+console.log('\n========== SMOKE ==========');
+const failed = Object.entries(results.checks).filter(([, v]) => !v.ok);
 if (failed.length === 0) {
-  console.log('✅ ALL', Object.keys(results.checks).length, 'CHECKS PASSED');
+  console.log('ALL', Object.keys(results.checks).length, 'CHECKS PASSED');
 } else {
-  console.log('❌', failed.length, 'FAILED:');
-  failed.forEach(([k, v]) => console.log('  -', k, '=', v.value));
+  console.log(failed.length, 'FAILED:');
+  failed.forEach(([k, v]) => console.log(' -', k, '=', v.value));
 }
-console.log('===========================================\n');
+console.log('===========================\n');
 process.exit(results.ok ? 0 : 1);

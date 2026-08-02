@@ -1,3 +1,5 @@
-# Render static site redirects (optional)
-/assets/* /assets/:splat 200
-/* /index.html 200
+# Trailing-slash canonicals for the SEO sub-pages
+/sobre                    /sobre/                     301
+/transplante-capilar-fue  /transplante-capilar-fue/   301
+/mmp-capilar              /mmp-capilar/               301
+/resultados               /resultados/                301

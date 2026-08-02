@@ -1416,7 +1416,13 @@ strong {
   font-size: 0.72rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--slate-light);
+  color: #9aa0b1;
+}
+.hero .crumbs {
+  color: #8f95a6;
+}
+.hero .crumbs a:hover {
+  color: var(--gold);
 }
 .crumbs li + li::before {
   content: '/';
