@@ -1,0 +1,44 @@
+# Dr. Gabriel Galeb — robots.txt
+# https://www.drgabrielgaleb.com.br/robots.txt
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /private/
+
+# Explicitly allow major AI/LLM crawlers (modern best practice)
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+# Sitemap
+Sitemap: https://www.drgabrielgaleb.com.br/sitemap.xml
+
+# Crawl-delay (be nice to small Render free-tier)
+Crawl-delay: 1
