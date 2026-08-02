@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="theme-color" content="#000000">
+  <meta name="theme-color" content="#0B0B0F">
   <meta name="color-scheme" content="dark">
 
   <!-- ============ PRIMARY META ============ -->
@@ -62,9 +62,9 @@
   <link rel="preconnect" href="https://wa.me">
   <link rel="dns-prefetch" href="https://www.google.com">
 
-  <!-- ============ FONTS (Unbounded = inspiration, Inter = body) ============ -->
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"></noscript>
+  <!-- ============ FONTS (Cormorant Garamond serif + Inter sans) ============ -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap"></noscript>
 
   <!-- ============ STYLESHEET ============ -->
   <link rel="stylesheet" href="/assets/css/styles.css">
@@ -86,8 +86,7 @@
         "email": "contato@drgabrielgaleb.com.br",
         "priceRange": "$$$",
         "currenciesAccepted": "BRL",
-        "paymentAccepted": "Cash, Credit Card, Debit Card, Bank Transfer, Pix",
-        "description": "Clínica especializada em transplante capilar em São Paulo, dirigida pelo Dr. Gabriel Galeb, membro da American Society of Aesthetic and Hair Restoration Surgeons (ASAHRS) e da Sociedade Brasileira de Cirurgia de Transplante Capilar. Realiza técnica FUE, MMP Capilar e avaliação personalizada.",
+        "description": "Clínica especializada em transplante capilar em São Paulo, dirigida pelo Dr. Gabriel Galeb, membro da American Society of Aesthetic and Hair Restoration Surgeons (ASAHRS) e da Sociedade Brasileira de Cirurgia de Transplante Capilar.",
         "founder": { "@id": "https://www.drgabrielgaleb.com.br/#dr-galeb" },
         "address": {
           "@type": "PostalAddress",
@@ -97,25 +96,10 @@
           "postalCode": "06454-000",
           "addressCountry": "BR"
         },
-        "geo": {
-          "@type": "GeoCoordinates",
-          "latitude": -23.5078,
-          "longitude": -46.8427
-        },
-        "hasMap": "https://maps.google.com/?q=Alameda+Rio+Negro+1084+Barueri+SP",
+        "geo": { "@type": "GeoCoordinates", "latitude": -23.5078, "longitude": -46.8427 },
         "openingHoursSpecification": [
-          {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
-            "opens": "09:00",
-            "closes": "19:00"
-          },
-          {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": "Saturday",
-            "opens": "09:00",
-            "closes": "13:00"
-          }
+          {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "09:00", "closes": "19:00"},
+          {"@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "09:00", "closes": "13:00"}
         ],
         "sameAs": [
           "https://www.instagram.com/dr.gabrielgaleb",
@@ -146,7 +130,6 @@
         "honorificPrefix": "Dr.",
         "jobTitle": "Cirurgião Especialista em Transplante Capilar",
         "url": "https://www.drgabrielgaleb.com.br/#sobre",
-        "image": "https://www.drgabrielgaleb.com.br/assets/img/doctor.jpg",
         "worksFor": { "@id": "https://www.drgabrielgaleb.com.br/#physician" },
         "alumniOf": [
           {"@type": "EducationalOrganization", "name": "Faculdade Israelita de Ciências da Saúde Albert Einstein", "sameAs": "https://einstein.br/"}
@@ -157,15 +140,7 @@
           {"@type": "EducationalOccupationalCredential", "credentialCategory": "membership", "name": "Membro — American Society of Aesthetic and Hair Restoration Surgeons (ASAHRS)"},
           {"@type": "EducationalOccupationalCredential", "credentialCategory": "membership", "name": "Membro — Sociedade Brasileira de Cirurgia de Transplante Capilar"}
         ],
-        "knowsAbout": [
-          "Transplante Capilar FUE",
-          "Restauração Capilar",
-          "Tricologia",
-          "MMP Capilar",
-          "Microinfusão Capilar",
-          "Calvície",
-          "Alopecia Androgenética"
-        ],
+        "knowsAbout": ["Transplante Capilar FUE", "Restauração Capilar", "Tricologia", "MMP Capilar", "Calvície", "Alopecia Androgenética"],
         "sameAs": ["https://www.instagram.com/dr.gabrielgaleb"]
       },
       {
@@ -177,24 +152,14 @@
         "publisher": { "@id": "https://www.drgabrielgaleb.com.br/#physician" }
       },
       {
-        "@type": "WebPage",
-        "@id": "https://www.drgabrielgaleb.com.br/#webpage",
-        "url": "https://www.drgabrielgaleb.com.br",
-        "name": "Dr. Gabriel Galeb — Transplante Capilar São Paulo",
-        "isPartOf": { "@id": "https://www.drgabrielgaleb.com.br/#website" },
-        "about": { "@id": "https://www.drgabrielgaleb.com.br/#physician" },
-        "inLanguage": "pt-BR",
-        "primaryImageOfPage": "https://www.drgabrielgaleb.com.br/assets/img/og-cover.jpg"
-      },
-      {
         "@type": "FAQPage",
         "mainEntity": [
-          {"@type": "Question", "name": "O transplante capilar dói?", "acceptedAnswer": {"@type": "Answer", "text": "Não. O procedimento é realizado com anestesia local, tornando-o indolor. O paciente permanece acordado, ouvindo música ou assistindo a um filme durante a cirurgia. Após o procedimento, qualquer desconforto é controlado com analgésicos comuns."}},
-          {"@type": "Question", "name": "Quanto tempo dura um transplante capilar?", "acceptedAnswer": {"@type": "Answer", "text": "A duração média é de 6 a 8 horas, dependendo da quantidade de folículos a serem transplantados. O procedimento é ambulatorial: o paciente vai para casa no mesmo dia."}},
-          {"@type": "Question", "name": "Quando vou ver os resultados?", "acceptedAnswer": {"@type": "Answer", "text": "Os fios transplantados caem entre 2 e 4 semanas — isso é normal. O crescimento novo começa a partir do 3º mês, com resultado progressivo. O resultado final é visível entre 9 e 12 meses."}},
-          {"@type": "Question", "name": "O transplante capilar é definitivo?", "acceptedAnswer": {"@type": "Answer", "text": "Sim. Os fios transplantados são retirados da área doadora (região posterior da cabeça), geneticamente resistente à calvície. Uma vez transplantados, continuam crescendo permanentemente."}},
-          {"@type": "Question", "name": "Vocês fazem transplante capilar sem raspagem?", "acceptedAnswer": {"@type": "Answer", "text": "Sim, oferecemos técnicas de FUE sem raspagem (no-shave) para casos selecionados. A avaliação presencial define a melhor abordagem para cada paciente."}},
-          {"@type": "Question", "name": "Como agendar uma avaliação em São Paulo?", "acceptedAnswer": {"@type": "Answer", "text": "Você pode agendar pelo nosso WhatsApp (11) 94075-7575 ou enviando uma foto pelo direct do Instagram @dr.gabrielgaleb. Atendemos em São Paulo - SP na Alameda Rio Negro, 1084, Sala M24."}}
+          {"@type": "Question", "name": "O transplante capilar dói?", "acceptedAnswer": {"@type": "Answer", "text": "Não. O procedimento é realizado com anestesia local, tornando-o indolor. O paciente permanece acordado durante a cirurgia."}},
+          {"@type": "Question", "name": "Quanto tempo dura um transplante capilar?", "acceptedAnswer": {"@type": "Answer", "text": "A duração média é de 6 a 8 horas, dependendo da quantidade de folículos. Procedimento ambulatorial."}},
+          {"@type": "Question", "name": "Quando vou ver os resultados?", "acceptedAnswer": {"@type": "Answer", "text": "Crescimento novo começa a partir do 3º mês. Resultado final entre 9 e 12 meses."}},
+          {"@type": "Question", "name": "O transplante capilar é definitivo?", "acceptedAnswer": {"@type": "Answer", "text": "Sim. Os fios transplantados são geneticamente resistentes à calvície e continuam crescendo permanentemente."}},
+          {"@type": "Question", "name": "Vocês fazem transplante sem raspagem?", "acceptedAnswer": {"@type": "Answer", "text": "Sim, oferecemos FUE sem raspagem (no-shave) para casos selecionados."}},
+          {"@type": "Question", "name": "Como agendar uma avaliação?", "acceptedAnswer": {"@type": "Answer", "text": "WhatsApp (11) 94075-7575 ou direct do Instagram @dr.gabrielgaleb. Alameda Rio Negro, 1084, Sala M24, São Paulo - SP."}}
         ]
       }
     ]
@@ -209,24 +174,26 @@
   <meta name="format-detection" content="telephone=yes">
 
   <!-- AI/LLM summary -->
-  <meta name="ai-summary" content="Dr. Gabriel Galeb é um cirurgião especialista em transplante capilar em São Paulo - SP, Brasil. Membro da American Society of Aesthetic and Hair Restoration Surgeons (ASAHRS) e da Sociedade Brasileira de Cirurgia de Transplante Capilar. Possui MBA em Gestão de Saúde pela Faculdade Israelita de Ciências da Saúde Albert Einstein e Fellowship em Restauração Capilar pela ASAHRS. Realiza técnica FUE (Follicular Unit Extraction), MMP Capilar e Avaliação Personalizada. Mais de 1.000 procedimentos realizados. Atende em São Paulo - SP na Alameda Rio Negro, 1084, Sala M24. Contato: WhatsApp +55 11 94075-7575, Instagram @dr.gabrielgaleb.">
+  <meta name="ai-summary" content="Dr. Gabriel Galeb é cirurgião especialista em transplante capilar em São Paulo - SP, Brasil. Membro da American Society of Aesthetic and Hair Restoration Surgeons (ASAHRS) e da Sociedade Brasileira de Cirurgia de Transplante Capilar. MBA em Gestão de Saúde pela Faculdade Israelita Albert Einstein, Fellowship em Restauração Capilar ASAHRS. Realiza técnica FUE, MMP Capilar e Avaliação Personalizada. +1.000 procedimentos. Alameda Rio Negro, 1084, Sala M24, São Paulo - SP. WhatsApp +55 11 94075-7575, Instagram @dr.gabrielgaleb.">
 </head>
 <body>
 
   <!-- ============ TOP BAR ============ -->
   <div class="topbar" role="complementary" aria-label="Informações de contato">
     <div class="container">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <span class="dot" aria-hidden="true"></span>
-        <span>atendendo em São Paulo — SP</span>
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+        <span>São Paulo &middot; Brasil</span>
+        <span class="divider-v" aria-hidden="true"></span>
+        <span>Cirurgião Certificado</span>
       </div>
-      <div class="tb-contact" style="display:flex;gap:24px;align-items:center;flex-wrap:wrap;">
-        <a href="https://wa.me/5511940757575?text=Olá%20Dr.%20Gabriel,%20gostaria%20de%20agendar%20uma%20avaliação." target="_blank" rel="noopener" aria-label="WhatsApp Dr. Gabriel Galeb">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      <div class="tb-contact" style="display:flex;gap:18px;align-items:center;flex-wrap:wrap;">
+        <a href="https://wa.me/5511940757575?text=Olá%20Dr.%20Gabriel,%20gostaria%20de%20agendar%20uma%20avaliação." target="_blank" rel="noopener" aria-label="WhatsApp">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           (11) 94075-7575
         </a>
-        <a href="https://www.instagram.com/dr.gabrielgaleb" target="_blank" rel="noopener" aria-label="Instagram Dr. Gabriel Galeb">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        <span class="divider-v" aria-hidden="true"></span>
+        <a href="https://www.instagram.com/dr.gabrielgaleb" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
           @dr.gabrielgaleb
         </a>
       </div>
@@ -239,21 +206,21 @@
       <a href="/" class="brand" aria-label="Página inicial Dr. Gabriel Galeb">
         <div class="brand-mark" aria-hidden="true">G</div>
         <div class="brand-name">
-          dr. gabriel galeb
-          <small>Transplante Capilar • SP</small>
+          Dr. Gabriel Galeb
+          <small>Transplante Capilar &middot; São Paulo</small>
         </div>
       </a>
       <nav aria-label="Navegação principal">
         <ul class="nav-links" id="navLinks">
-          <li><a href="#sobre">o médico</a></li>
-          <li><a href="#servicos">soluções</a></li>
-          <li><a href="#processo">como funciona</a></li>
-          <li><a href="#resultados">resultados</a></li>
-          <li><a href="#faq">dúvidas</a></li>
-          <li><a href="#contato">contato</a></li>
+          <li><a href="#sobre">O Médico</a></li>
+          <li><a href="#solucoes">Soluções</a></li>
+          <li><a href="#processo">Jornada</a></li>
+          <li><a href="#resultados">Resultados</a></li>
+          <li><a href="#depoimentos">Depoimentos</a></li>
+          <li><a href="#contato">Contato</a></li>
         </ul>
       </nav>
-      <a href="https://wa.me/5511940757575?text=Olá%20Dr.%20Gabriel,%20gostaria%20de%20agendar%20uma%20avaliação." class="nav-cta" target="_blank" rel="noopener">Agendar Avaliação</a>
+      <a href="https://wa.me/5511940757575?text=Olá%20Dr.%20Gabriel,%20gostaria%20de%20agendar%20uma%20avaliação." class="nav-cta" target="_blank" rel="noopener">Agendar</a>
       <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="navLinks">☰</button>
     </div>
   </header>
@@ -264,102 +231,102 @@
     <section class="hero" aria-labelledby="hero-title">
       <div class="container">
         <div class="hero-grid">
-          <div>
-            <div class="hero-logo-row">
-              <div class="hero-logo" aria-hidden="true">G</div>
-              <span class="hero-handle">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-                @dr.gabrielgaleb
-              </span>
+          <div class="hero-content">
+            <div class="hero-eyebrow">
+              <span class="hero-eyebrow-text">Transplante Capilar &middot; São Paulo</span>
             </div>
-            <h1 id="hero-title">renove sua <span class="accent">confiança.</span><br>reconstrua sua <span class="accent">identidade.</span></h1>
-            <div class="divider-line" aria-hidden="true"></div>
-            <p class="hero-tagline">
-              reconstruo cabelos e transformo vidas
-              <span class="sep">|</span> +1.000 procedimentos
-              <span class="sep">|</span> técnica FUE
-              <span class="sep">|</span> alta densidade
-            </p>
-            <p class="hero-sub">Cirurgia de transplante capilar conduzida pelo Dr. Gabriel Galeb — membro da American Society of Aesthetic and Hair Restoration Surgeons (ASAHRS) e da Sociedade Brasileira de Cirurgia de Transplante Capilar. Atendimento humanizado em São Paulo - SP.</p>
+            <h1 id="hero-title">A arte da restauração <em>capilar.</em></h1>
+            <p class="hero-sub">Cirurgia de transplante capilar conduzida pelo Dr. Gabriel Galeb — cirurgião certificado pela American Society of Aesthetic and Hair Restoration Surgeons (ASAHRS) e pela Sociedade Brasileira de Cirurgia de Transplante Capilar. Atendemos em São Paulo.</p>
+            <p class="hero-tagline">+1.000 procedimentos &middot; técnica FUE &middot; alta densidade &middot; sem raspagem</p>
             <div class="hero-ctas">
-              <a href="https://wa.me/5511940757575?text=Olá%20Dr.%20Gabriel,%20gostaria%20de%20agendar%20uma%20avaliação." class="btn btn-primary btn-icon" target="_blank" rel="noopener" aria-label="Agendar avaliação pelo WhatsApp">Agendar Avaliação</a>
-              <a href="#servicos" class="btn btn-ghost">Conheça os Tratamentos</a>
+              <a href="https://wa.me/5511940757575?text=Olá%20Dr.%20Gabriel,%20gostaria%20de%20agendar%20uma%20avaliação." class="btn btn-gold btn-arrow" target="_blank" rel="noopener" aria-label="Agendar avaliação pelo WhatsApp">Agendar Avaliação</a>
+              <a href="#solucoes" class="btn btn-ghost-light btn-arrow">Conhecer Tratamentos</a>
             </div>
           </div>
           <div class="hero-portrait-wrap" aria-hidden="true">
             <div class="hero-portrait">
               <span class="hero-portrait-initial">GG</span>
-              <div class="hero-portrait-label">Dr. Gabriel Galeb • CRM-SP</div>
+            </div>
+            <div class="hero-portrait-name">
+              <strong>Dr. Gabriel Galeb</strong>
+              <span>Cirurgião · CRM-SP · ASAHRS</span>
             </div>
           </div>
         </div>
 
-        <!-- Stats bar -->
         <div class="stats-bar" role="list" aria-label="Conquistas do Dr. Gabriel Galeb">
           <div class="stat" role="listitem">
             <div class="stat-num">+1.000</div>
-            <div class="stat-lbl">procedimentos</div>
+            <div class="stat-lbl">Procedimentos</div>
           </div>
           <div class="stat" role="listitem">
             <div class="stat-num">10+</div>
-            <div class="stat-lbl">anos de experiência</div>
+            <div class="stat-lbl">Anos de Experiência</div>
           </div>
           <div class="stat" role="listitem">
-            <div class="stat-num">4.9★</div>
-            <div class="stat-lbl">avaliação dos pacientes</div>
+            <div class="stat-num">4.9</div>
+            <div class="stat-lbl">Avaliação dos Pacientes</div>
           </div>
           <div class="stat" role="listitem">
-            <div class="stat-num">2</div>
-            <div class="stat-lbl">sociedades médicas</div>
+            <div class="stat-num">02</div>
+            <div class="stat-lbl">Sociedades Médicas</div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ============ ABOUT / DOCTOR ============ -->
-    <section id="sobre" aria-labelledby="about-title">
+    <section id="sobre" class="about" aria-labelledby="about-title">
       <div class="container">
         <div class="about-grid">
           <div class="doctor-frame" aria-hidden="true">
             <div class="doctor-init">GG</div>
             <div class="doctor-nameplate">
-              <strong>dr. gabriel galeb</strong>
-              <span>CRM-SP • Transplante Capilar</span>
+              <strong>Dr. Gabriel Galeb</strong>
+              <span>CRM-SP · Transplante Capilar</span>
             </div>
           </div>
           <div class="about-body">
-            <span class="eyebrow">o médico</span>
-            <h2 id="about-title">especialista em <em>transplante capilar</em> em são paulo</h2>
+            <span class="eyebrow">O Médico</span>
+            <h2 id="about-title">Especialista em <em>transplante capilar</em> em São Paulo.</h2>
             <p>Há mais de uma década, o <strong>Dr. Gabriel Galeb</strong> se dedica à arte e à ciência da restauração capilar. Com formação internacional e mais de <strong>1.000 procedimentos realizados</strong>, é referência em transplante capilar em São Paulo — unindo técnica apurada, sensibilidade estética e cuidado humanizado.</p>
             <p>Membro da <strong>American Society of Aesthetic and Hair Restoration Surgeons (ASAHRS)</strong> e da <strong>Sociedade Brasileira de Cirurgia de Transplante Capilar</strong>, o Dr. Gabriel Galeb combina a expertise internacional com a realidade clínica brasileira, entregando resultados naturais que respeitam o tipo de cabelo, o formato do rosto e a identidade de cada paciente.</p>
-            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:32px;">
-              <div class="diff" role="listitem">
-                <div class="diff-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L4 6v6c0 5.55 3.84 10.74 8 12 4.16-1.26 8-6.45 8-12V6l-8-4z"/></svg>
+            <div class="credentials" role="list" aria-label="Credenciais do Dr. Gabriel Galeb">
+              <div class="credential" role="listitem">
+                <div class="credential-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L4 6v6c0 5.55 3.84 10.74 8 12 4.16-1.26 8-6.45 8-12V6l-8-4z"/><path d="M9 12l2 2 4-4"/></svg>
                 </div>
-                <h4>ASAHRS</h4>
-                <p>American Society of Aesthetic and Hair Restoration Surgeons</p>
+                <div class="credential-text">
+                  <small>Asahrs</small>
+                  Membro da American Society of Aesthetic and Hair Restoration Surgeons
+                </div>
               </div>
-              <div class="diff" role="listitem">
-                <div class="diff-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 10-16 0"/></svg>
+              <div class="credential" role="listitem">
+                <div class="credential-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 10-16 0"/></svg>
                 </div>
-                <h4>SBCTC</h4>
-                <p>Sociedade Brasileira de Cirurgia de Transplante Capilar</p>
+                <div class="credential-text">
+                  <small>Sbctc</small>
+                  Sociedade Brasileira de Cirurgia de Transplante Capilar
+                </div>
               </div>
-              <div class="diff" role="listitem">
-                <div class="diff-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+              <div class="credential" role="listitem">
+                <div class="credential-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
                 </div>
-                <h4>MBA Einstein</h4>
-                <p>Gestão de Saúde — Albert Einstein (Israelita)</p>
+                <div class="credential-text">
+                  <small>Mba Einstein</small>
+                  MBA em Gestão de Saúde — Albert Einstein (Israelita)
+                </div>
               </div>
-              <div class="diff" role="listitem">
-                <div class="diff-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/></svg>
+              <div class="credential" role="listitem">
+                <div class="credential-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
                 </div>
-                <h4>Fellow</h4>
-                <p>Fellowship em Restauração Capilar — ASAHRS</p>
+                <div class="credential-text">
+                  <small>Fellow</small>
+                  Fellowship em Restauração Capilar — ASAHRS
+                </div>
               </div>
             </div>
           </div>
@@ -368,54 +335,76 @@
     </section>
 
     <!-- ============ SERVICES ============ -->
-    <section id="servicos" class="services" aria-labelledby="services-title">
+    <section id="solucoes" class="services" aria-labelledby="services-title">
       <div class="container">
         <div class="section-head">
-          <span class="eyebrow">soluções sob medida</span>
-          <h2 id="services-title">tratamentos para <em>cada etapa da calvície</em></h2>
+          <span class="eyebrow">Soluções</span>
+          <h2 id="services-title">Tratamentos sob <em>medida</em>.</h2>
           <p>Protocolos personalizados que combinam técnica, tecnologia e estética para resultados naturais e definitivos.</p>
+          <div class="gold-line" aria-hidden="true"></div>
         </div>
         <div class="services-grid">
 
           <article class="service-card">
+            <div class="service-num" aria-hidden="true">01</div>
+            <div class="service-card-image">
+              <div class="icon-big" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M12 2v20M5 5l14 14M19 5L5 19"/></svg>
+              </div>
+            </div>
             <div class="service-card-body">
-              <span class="service-tag">técnica avançada</span>
-              <h3>transplante capilar <em>masculino</em></h3>
+              <span class="service-tag">Técnica Avançada</span>
+              <h3>Transplante Capilar <em>Masculino</em></h3>
               <p>Técnica FUE (Follicular Unit Extraction). Extração folículo a folículo, sem cicatriz linear, resultado natural e denso.</p>
-              <a href="https://wa.me/5511940757575?text=Olá%20Dr.%20Gabriel,%20gostaria%20de%20saber%20mais%20sobre%20Transplante%20Capilar%20Masculino." class="btn btn-primary btn-icon" target="_blank" rel="noopener">Saber mais</a>
-            </div>
-            <div class="service-card-image">
-              <div class="icon-big" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v20M5 5l14 14M19 5L5 19"/></svg>
-              </div>
-            </div>
-          </article>
-
-          <article class="service-card mint">
-            <div class="service-card-body">
-              <span class="service-tag">microinfusão</span>
-              <h3>mmp <em>capilar</em></h3>
-              <p>Microinfusão de Medicamentos Personalizados. Tratamento minimamente invasivo para fortalecer fios e estimular crescimento.</p>
-              <a href="https://wa.me/5511940757575?text=Olá%20Dr.%20Gabriel,%20gostaria%20de%20saber%20mais%20sobre%20MMP%20Capilar." class="btn btn-mint btn-icon" target="_blank" rel="noopener">Saber mais</a>
-            </div>
-            <div class="service-card-image">
-              <div class="icon-big" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24"/></svg>
-              </div>
+              <ul class="service-features">
+                <li>Sem raspagem disponível</li>
+                <li>Alta densidade por cm²</li>
+                <li>Linha frontal sob medida</li>
+                <li>Definitivo</li>
+              </ul>
+              <a href="https://wa.me/5511940757575?text=Olá%20Dr.%20Gabriel,%20gostaria%20de%20saber%20mais%20sobre%20Transplante%20Capilar%20Masculino." class="btn btn-outline-gold btn-arrow" target="_blank" rel="noopener">Saber Mais</a>
             </div>
           </article>
 
           <article class="service-card">
-            <div class="service-card-body">
-              <span class="service-tag">primeiro passo</span>
-              <h3>avaliação <em>personalizada</em></h3>
-              <p>Análise completa do couro cabeludo, classificação da calvície e plano de tratamento individualizado. Online ou presencial.</p>
-              <a href="https://wa.me/5511940757575?text=Olá%20Dr.%20Gabriel,%20gostaria%20de%20agendar%20uma%20Avaliação%20Personalizada." class="btn btn-primary btn-icon" target="_blank" rel="noopener">Agendar agora</a>
-            </div>
+            <div class="service-num" aria-hidden="true">02</div>
             <div class="service-card-image">
               <div class="icon-big" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="3"/><path d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24"/></svg>
               </div>
+            </div>
+            <div class="service-card-body">
+              <span class="service-tag">Microinfusão</span>
+              <h3>MMP <em>Capilar</em></h3>
+              <p>Microinfusão de Medicamentos Personalizados. Tratamento minimamente invasivo para fortalecer fios, desacelerar a queda e estimular crescimento.</p>
+              <ul class="service-features">
+                <li>Microagulhas de precisão</li>
+                <li>Ativos selecionados</li>
+                <li>Indicado para queda inicial</li>
+                <li>Complemento ao transplante</li>
+              </ul>
+              <a href="https://wa.me/5511940757575?text=Olá%20Dr.%20Gabriel,%20gostaria%20de%20saber%20mais%20sobre%20MMP%20Capilar." class="btn btn-outline-gold btn-arrow" target="_blank" rel="noopener">Saber Mais</a>
+            </div>
+          </article>
+
+          <article class="service-card">
+            <div class="service-num" aria-hidden="true">03</div>
+            <div class="service-card-image">
+              <div class="icon-big" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+              </div>
+            </div>
+            <div class="service-card-body">
+              <span class="service-tag">Primeiro Passo</span>
+              <h3>Avaliação <em>Personalizada</em></h3>
+              <p>Análise completa do couro cabeludo, classificação da calvície e plano de tratamento individualizado. Online ou presencial em São Paulo.</p>
+              <ul class="service-features">
+                <li>Tricoscopia digital</li>
+                <li>Plano individualizado</li>
+                <li>Orçamento transparente</li>
+                <li>Envio de fotos pelo WhatsApp</li>
+              </ul>
+              <a href="https://wa.me/5511940757575?text=Olá%20Dr.%20Gabriel,%20gostaria%20de%20agendar%20uma%20Avaliação%20Personalizada." class="btn btn-outline-gold btn-arrow" target="_blank" rel="noopener">Agendar</a>
             </div>
           </article>
 
@@ -424,145 +413,142 @@
     </section>
 
     <!-- ============ DIFFERENTIATORS ============ -->
-    <section aria-labelledby="diffs-title">
+    <section class="diffs-section" aria-labelledby="diffs-title">
       <div class="container">
         <div class="section-head">
-          <span class="eyebrow">por que nos escolher</span>
-          <h2 id="diffs-title">cinco razões para <em>começar aqui</em></h2>
+          <span class="eyebrow">A Diferença</span>
+          <h2 id="diffs-title">Por que <em>nós</em>.</h2>
+          <div class="gold-line" aria-hidden="true"></div>
         </div>
         <div class="diffs">
-
           <div class="diff">
             <div class="diff-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
             </div>
-            <h4>técnica FUE avançada</h4>
+            <h4>Técnica FUE</h4>
             <p>Extração folicular individual, sem cicatriz linear.</p>
           </div>
-
           <div class="diff">
             <div class="diff-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
             </div>
-            <h4>resultado natural</h4>
-            <p>Linha frontal sob medida, respeitando o rosto.</p>
+            <h4>Resultado Natural</h4>
+            <p>Linha frontal desenhada sob medida.</p>
           </div>
-
           <div class="diff">
             <div class="diff-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
             </div>
-            <h4>atendimento humanizado</h4>
-            <p>Acompanhamento próximo, antes, durante e depois.</p>
+            <h4>Atendimento Próximo</h4>
+            <p>Acompanhamento antes, durante e depois.</p>
           </div>
-
           <div class="diff">
             <div class="diff-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
             </div>
-            <h4>estrutura hospitalar</h4>
-            <p>Centro cirúrgico em São Paulo, com toda a segurança.</p>
+            <h4>Centro Cirúrgico</h4>
+            <p>Hospital de referência em São Paulo.</p>
           </div>
-
           <div class="diff">
             <div class="diff-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
             </div>
-            <h4>12 meses de pós</h4>
+            <h4>12 Meses de Pós</h4>
             <p>Suporte completo e assistência vitalícia.</p>
           </div>
-
         </div>
       </div>
     </section>
 
     <!-- ============ PROCESS ============ -->
-    <section id="processo" aria-labelledby="process-title">
+    <section id="processo" class="process-section" aria-labelledby="process-title">
       <div class="container">
         <div class="section-head">
-          <span class="eyebrow">como funciona</span>
-          <h2 id="process-title">sua jornada em <em>5 passos</em></h2>
+          <span class="eyebrow">A Jornada</span>
+          <h2 id="process-title">Sua transformação em <em>cinco passos</em>.</h2>
           <p>Da primeira consulta ao resultado final, cada etapa é desenhada para sua tranquilidade.</p>
+          <div class="gold-line" aria-hidden="true"></div>
         </div>
         <ol class="process">
           <li class="step">
             <div class="step-num" aria-hidden="true">1</div>
-            <h4>avaliação</h4>
-            <p>Análise do couro cabeludo e do seu caso, com classificação da calvície.</p>
+            <h4>Avaliação</h4>
+            <p>Análise do couro cabeludo e classificação da calvície.</p>
           </li>
           <li class="step">
             <div class="step-num" aria-hidden="true">2</div>
-            <h4>planejamento</h4>
-            <p>Plano cirúrgico individualizado, desenho da linha frontal e número de folículos.</p>
+            <h4>Planejamento</h4>
+            <p>Plano cirúrgico individualizado e desenho da linha frontal.</p>
           </li>
           <li class="step">
             <div class="step-num" aria-hidden="true">3</div>
-            <h4>cirurgia</h4>
-            <p>Procedimento ambulatorial com anestesia local. Duração de 6 a 8 horas.</p>
+            <h4>Cirurgia</h4>
+            <p>Procedimento ambulatorial de 6 a 8 horas com anestesia local.</p>
           </li>
           <li class="step">
             <div class="step-num" aria-hidden="true">4</div>
-            <h4>recuperação</h4>
-            <p>Acompanhamento semanal nos primeiros 30 dias. Retorno gradual às atividades.</p>
+            <h4>Recuperação</h4>
+            <p>Acompanhamento semanal nos primeiros 30 dias.</p>
           </li>
           <li class="step">
             <div class="step-num" aria-hidden="true">5</div>
-            <h4>resultado</h4>
-            <p>Crescimento progressivo a partir do 3º mês. Resultado final entre 9 e 12 meses.</p>
+            <h4>Resultado</h4>
+            <p>Crescimento progressivo. Resultado final entre 9 e 12 meses.</p>
           </li>
         </ol>
       </div>
     </section>
 
     <!-- ============ GALLERY ============ -->
-    <section id="resultados" aria-labelledby="results-title">
+    <section id="resultados" class="gallery-section" aria-labelledby="results-title">
       <div class="container">
         <div class="section-head">
-          <span class="eyebrow">resultados</span>
-          <h2 id="results-title">transformações <em>reais</em></h2>
-          <p>Cada paciente é único. As fotos abaixo mostram resultados reais obtidos em nossa clínica em São Paulo.</p>
+          <span class="eyebrow">Resultados</span>
+          <h2 id="results-title">Transformações <em>reais</em>.</h2>
+          <p>Cada paciente é único. As imagens abaixo apresentam resultados reais obtidos em nossa clínica em São Paulo.</p>
+          <div class="gold-line" aria-hidden="true"></div>
         </div>
         <div class="gallery">
           <div class="gallery-item">
-            <span class="gallery-badge">antes &amp; depois</span>
+            <span class="gallery-badge">Antes &amp; Depois</span>
             <div class="gallery-placeholder">
-              <div class="label">caso 1</div>
-              <div class="sub">Linha frontal reconstruída • 2.800 folículos</div>
+              <div class="label">Caso 01</div>
+              <div class="sub">Linha frontal reconstruída &middot; 2.800 folículos</div>
             </div>
           </div>
           <div class="gallery-item">
-            <span class="gallery-badge">antes &amp; depois</span>
+            <span class="gallery-badge">Antes &amp; Depois</span>
             <div class="gallery-placeholder">
-              <div class="label">caso 2</div>
-              <div class="sub">Coroa + entradas • 3.200 folículos</div>
+              <div class="label">Caso 02</div>
+              <div class="sub">Coroa + entradas &middot; 3.200 folículos</div>
             </div>
           </div>
           <div class="gallery-item">
-            <span class="gallery-badge">antes &amp; depois</span>
+            <span class="gallery-badge">Antes &amp; Depois</span>
             <div class="gallery-placeholder">
-              <div class="label">caso 3</div>
-              <div class="sub">Densificação • 2.000 folículos</div>
+              <div class="label">Caso 03</div>
+              <div class="sub">Densificação &middot; 2.000 folículos</div>
             </div>
           </div>
           <div class="gallery-item">
-            <span class="gallery-badge">antes &amp; depois</span>
+            <span class="gallery-badge">Antes &amp; Depois</span>
             <div class="gallery-placeholder">
-              <div class="label">caso 4</div>
-              <div class="sub">Cobertura coroa • 2.500 folículos</div>
+              <div class="label">Caso 04</div>
+              <div class="sub">Cobertura coroa &middot; 2.500 folículos</div>
             </div>
           </div>
           <div class="gallery-item">
-            <span class="gallery-badge">antes &amp; depois</span>
+            <span class="gallery-badge">Antes &amp; Depois</span>
             <div class="gallery-placeholder">
-              <div class="label">caso 5</div>
-              <div class="sub">Sem raspagem • 1.800 folículos</div>
+              <div class="label">Caso 05</div>
+              <div class="sub">Sem raspagem &middot; 1.800 folículos</div>
             </div>
           </div>
           <div class="gallery-item">
-            <span class="gallery-badge">antes &amp; depois</span>
+            <span class="gallery-badge">Antes &amp; Depois</span>
             <div class="gallery-placeholder">
-              <div class="label">caso 6</div>
-              <div class="sub">Reconstrução completa • 3.500 folículos</div>
+              <div class="label">Caso 06</div>
+              <div class="sub">Reconstrução completa &middot; 3.500 folículos</div>
             </div>
           </div>
         </div>
@@ -571,65 +557,70 @@
     </section>
 
     <!-- ============ TESTIMONIALS ============ -->
-    <section aria-labelledby="testimonials-title">
+    <section id="depoimentos" class="testimonials" aria-labelledby="testimonials-title">
       <div class="container">
         <div class="section-head">
-          <span class="eyebrow">depoimentos</span>
-          <h2 id="testimonials-title">o que <em>quem viveu</em> diz</h2>
+          <span class="eyebrow">Depoimentos</span>
+          <h2 id="testimonials-title">O que <em>quem viveu</em> diz.</h2>
+          <div class="gold-line" aria-hidden="true"></div>
         </div>
         <div class="t-grid">
           <article class="t-card">
+            <span class="t-quote-mark" aria-hidden="true">&ldquo;</span>
+            <p class="t-quote">O Dr. Gabriel me passou uma segurança que eu nunca tive em outras consultas. O resultado ficou exatamente como planejamos, natural e denso.</p>
             <div class="t-stars" aria-label="Avaliação 5 de 5">★ ★ ★ ★ ★</div>
-            <p class="t-quote">o dr. gabriel me passou uma segurança que eu nunca tive em outras consultas. o resultado ficou exatamente como planejamos, natural e denso. mudou minha autoestima.</p>
-            <div class="t-name">ricardo m.</div>
-            <div class="t-loc">são paulo — sp</div>
+            <div class="t-name">Ricardo M.</div>
+            <div class="t-loc">São Paulo · SP</div>
           </article>
           <article class="t-card">
+            <span class="t-quote-mark" aria-hidden="true">&ldquo;</span>
+            <p class="t-quote">Atendimento impecável, do WhatsApp ao pós-operatório. Fiz transplante há 8 meses e o resultado superou minhas expectativas.</p>
             <div class="t-stars" aria-label="Avaliação 5 de 5">★ ★ ★ ★ ★</div>
-            <p class="t-quote">atendimento impecável, do whatsapp ao pós-operatório. fiz transplante há 8 meses e o resultado superou minhas expectativas. recomendo de olhos fechados.</p>
-            <div class="t-name">felipe a.</div>
-            <div class="t-loc">campinas — sp</div>
+            <div class="t-name">Felipe A.</div>
+            <div class="t-loc">Campinas · SP</div>
           </article>
           <article class="t-card">
+            <span class="t-quote-mark" aria-hidden="true">&ldquo;</span>
+            <p class="t-quote">Profissional de excelência. A consulta foi super detalhada, ele explicou cada etapa. Hoje me sinto outra pessoa.</p>
             <div class="t-stars" aria-label="Avaliação 5 de 5">★ ★ ★ ★ ★</div>
-            <p class="t-quote">profissional de excelência. a consulta foi super detalhada, ele explicou cada etapa. hoje me sinto outra pessoa. a linha frontal ficou perfeita.</p>
-            <div class="t-name">andré l.</div>
-            <div class="t-loc">rio de janeiro — rj</div>
+            <div class="t-name">André L.</div>
+            <div class="t-loc">Rio de Janeiro · RJ</div>
           </article>
         </div>
       </div>
     </section>
 
     <!-- ============ FAQ ============ -->
-    <section id="faq" aria-labelledby="faq-title">
+    <section id="faq" class="faq-section" aria-labelledby="faq-title">
       <div class="container">
         <div class="section-head">
-          <span class="eyebrow">dúvidas frequentes</span>
-          <h2 id="faq-title">tudo o que você precisa <em>saber</em></h2>
+          <span class="eyebrow">Dúvidas</span>
+          <h2 id="faq-title">Tudo o que você precisa <em>saber</em>.</h2>
+          <div class="gold-line" aria-hidden="true"></div>
         </div>
         <div class="faq-list">
           <details class="faq-item">
-            <summary>o transplante capilar dói?</summary>
+            <summary>O transplante capilar dói?</summary>
             <p>Não. O procedimento é realizado com anestesia local, tornando-o indolor. O paciente permanece acordado, ouvindo música ou assistindo a um filme durante a cirurgia. Após o procedimento, qualquer desconforto é controlado com analgésicos comuns.</p>
           </details>
           <details class="faq-item">
-            <summary>quanto tempo dura um transplante capilar?</summary>
+            <summary>Quanto tempo dura um transplante capilar?</summary>
             <p>A duração média é de 6 a 8 horas, dependendo da quantidade de folículos a serem transplantados. O procedimento é ambulatorial: o paciente vai para casa no mesmo dia.</p>
           </details>
           <details class="faq-item">
-            <summary>quando vou ver os resultados?</summary>
+            <summary>Quando vou ver os resultados?</summary>
             <p>Os fios transplantados caem entre 2 e 4 semanas — isso é normal. O crescimento novo começa a partir do 3º mês, com resultado progressivo. O resultado final é visível entre 9 e 12 meses.</p>
           </details>
           <details class="faq-item">
-            <summary>o transplante capilar é definitivo?</summary>
+            <summary>O transplante capilar é definitivo?</summary>
             <p>Sim. Os fios transplantados são retirados da área doadora (região posterior da cabeça), geneticamente resistente à calvície. Uma vez transplantados, continuam crescendo permanentemente.</p>
           </details>
           <details class="faq-item">
-            <summary>vocês fazem transplante capilar sem raspagem?</summary>
+            <summary>Vocês fazem transplante capilar sem raspagem?</summary>
             <p>Sim, oferecemos técnicas de FUE sem raspagem (no-shave) para casos selecionados. A avaliação presencial define a melhor abordagem para cada paciente.</p>
           </details>
           <details class="faq-item">
-            <summary>como agendar uma avaliação em são paulo?</summary>
+            <summary>Como agendar uma avaliação em São Paulo?</summary>
             <p>Você pode agendar pelo nosso WhatsApp (11) 94075-7575 ou enviando uma foto pelo direct do Instagram @dr.gabrielgaleb. Atendemos em São Paulo - SP na Alameda Rio Negro, 1084, Sala M24.</p>
           </details>
         </div>
@@ -639,12 +630,12 @@
     <!-- ============ CTA FOOTER ============ -->
     <section id="contato" class="cta-footer" aria-labelledby="cta-title">
       <div class="container">
-        <span class="eyebrow">próximo passo</span>
-        <h2 id="cta-title">comece sua <em>transformação</em> hoje</h2>
+        <span class="eyebrow">Próximo Passo</span>
+        <h2 id="cta-title">Comece sua <em>transformação</em>.</h2>
         <p>Agende sua avaliação personalizada com o Dr. Gabriel Galeb. Atendimento em São Paulo - SP ou avaliação online pelo WhatsApp.</p>
         <div class="cta-buttons">
-          <a href="https://wa.me/5511940757575?text=Olá%20Dr.%20Gabriel,%20gostaria%20de%20agendar%20uma%20avaliação." class="btn btn-primary btn-icon" target="_blank" rel="noopener">Agendar pelo WhatsApp</a>
-          <a href="https://www.instagram.com/dr.gabrielgaleb" class="btn btn-ghost" target="_blank" rel="noopener">Ver no Instagram</a>
+          <a href="https://wa.me/5511940757575?text=Olá%20Dr.%20Gabriel,%20gostaria%20de%20agendar%20uma%20avaliação." class="btn btn-gold btn-arrow" target="_blank" rel="noopener">Agendar pelo WhatsApp</a>
+          <a href="https://www.instagram.com/dr.gabrielgaleb" class="btn btn-ghost-light btn-arrow" target="_blank" rel="noopener">Instagram</a>
         </div>
       </div>
     </section>
@@ -658,8 +649,8 @@
           <div class="brand">
             <div class="brand-mark" aria-hidden="true">G</div>
             <div class="brand-name">
-              dr. gabriel galeb
-              <small>Transplante Capilar • SP</small>
+              Dr. Gabriel Galeb
+              <small>Transplante Capilar &middot; São Paulo</small>
             </div>
           </div>
           <p>Clínica especializada em transplante capilar em São Paulo. Mais de 1.000 procedimentos realizados com técnica FUE, MMP Capilar e avaliação personalizada.</p>
@@ -673,27 +664,27 @@
           </div>
         </div>
         <div>
-          <h4>tratamentos</h4>
+          <h4>Tratamentos</h4>
           <ul>
-            <li><a href="#servicos">Transplante Capilar</a></li>
-            <li><a href="#servicos">MMP Capilar</a></li>
-            <li><a href="#servicos">Avaliação Personalizada</a></li>
-            <li><a href="#processo">Como funciona</a></li>
+            <li><a href="#solucoes">Transplante Capilar</a></li>
+            <li><a href="#solucoes">MMP Capilar</a></li>
+            <li><a href="#solucoes">Avaliação Personalizada</a></li>
+            <li><a href="#processo">Como Funciona</a></li>
           </ul>
         </div>
         <div>
-          <h4>institucional</h4>
+          <h4>Institucional</h4>
           <ul>
             <li><a href="#sobre">O Médico</a></li>
             <li><a href="#resultados">Resultados</a></li>
-            <li><a href="#faq">Dúvidas Frequentes</a></li>
-            <li><a href="#contato">Contato</a></li>
+            <li><a href="#depoimentos">Depoimentos</a></li>
+            <li><a href="#faq">Dúvidas</a></li>
           </ul>
         </div>
         <div>
-          <h4>atendimento</h4>
+          <h4>Atendimento</h4>
           <ul>
-            <li>Alameda Rio Negro, 1084<br>Sala M24 — São Paulo/SP</li>
+            <li>Alameda Rio Negro, 1084<br>Sala M24 &middot; São Paulo/SP</li>
             <li><a href="tel:+5511940757575">(11) 94075-7575</a></li>
             <li><a href="https://wa.me/5511940757575" target="_blank" rel="noopener">WhatsApp</a></li>
             <li>Seg–Sex: 9h–19h<br>Sáb: 9h–13h</li>
@@ -701,8 +692,8 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <span>© 2026 Dr. Gabriel Galeb — Todos os direitos reservados.</span>
-        <span>CRM-SP • Responsável Técnico: Dr. Gabriel Galeb</span>
+        <span class="left">&copy; 2026 Dr. Gabriel Galeb</span>
+        <span>CRM-SP &middot; Responsável Técnico: Dr. Gabriel Galeb</span>
       </div>
     </div>
   </footer>
@@ -710,7 +701,7 @@
   <!-- ============ FLOATING WHATSAPP ============ -->
   <a href="https://wa.me/5511940757575?text=Olá%20Dr.%20Gabriel,%20gostaria%20de%20agendar%20uma%20avaliação." class="fab-wa" target="_blank" rel="noopener" aria-label="Agendar avaliação pelo WhatsApp">
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-    <span>Agendar Avaliação</span>
+    <span>Agendar</span>
   </a>
 
   <script src="/assets/js/main.js" defer></script>
