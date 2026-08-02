@@ -679,7 +679,17 @@ section + section { padding-top: 110px; }
   content: "";
   position: absolute; inset: 0;
   background: radial-gradient(circle at center, rgba(184, 150, 62, 0.08), transparent 70%);
+  z-index: 1;
+  pointer-events: none;
 }
+.service-card-image img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: contrast(1.05) saturate(0.95);
+  transition: transform 0.6s ease;
+}
+.service-card-image:hover img { transform: scale(1.05); }
 .service-card-image .icon-big {
   position: relative; z-index: 1;
   width: 64px; height: 64px;
@@ -943,9 +953,20 @@ section + section { padding-top: 110px; }
   border-right: 1px solid var(--ink-line);
   position: relative;
   transition: background 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 .t-card:last-child { border-right: 0; }
 .t-card:hover { background: var(--ink-soft); }
+.t-avatar {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 24px;
+  border: 1px solid var(--gold-line);
+  display: block;
+}
 .t-quote-mark {
   font-family: var(--serif);
   font-size: 3.5rem; font-weight: 400;
