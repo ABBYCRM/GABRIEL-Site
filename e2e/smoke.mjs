@@ -56,7 +56,7 @@ try {
 }
 
 // Sections
-const sections = ['.topbar', '.nav', '.hero', '#sobre', '#servicos', '#processo', '#resultados', '#faq', '#contato', 'footer'];
+const sections = ['.topbar', '.nav', '.hero', '#sobre', '#solucoes', '#processo', '#resultados', '#depoimentos', '#faq', '#contato', 'footer'];
 for (const sel of sections) {
   const visible = await page.locator(sel).first().isVisible().catch(() => false);
   log(`section:${sel}`, visible, visible);
@@ -66,19 +66,24 @@ for (const sel of sections) {
 const waLinks = await page.locator('a[href*="wa.me"]').count();
 log('whatsapp_cta_count', waLinks, waLinks >= 3);
 
-// Floating WhatsApp button — KEY CHECK
+// Floating WhatsApp button — KEY CHECK (now dark with gold border)
 const fabPos = await page.locator('.fab-wa').evaluate(el => getComputedStyle(el).position);
 const fabBg = await page.locator('.fab-wa').evaluate(el => getComputedStyle(el).backgroundColor);
+const fabBorder = await page.locator('.fab-wa').evaluate(el => getComputedStyle(el).border);
 log('fab_wa_position_fixed', fabPos === 'fixed', fabPos === 'fixed');
-log('fab_wa_bg_green', fabBg === 'rgb(37, 211, 102)', fabBg === 'rgb(37, 211, 102)');
+log('fab_wa_dark_with_gold_border', fabBg === 'rgb(11, 11, 15)' && fabBorder.includes('184, 150, 62'), fabBg === 'rgb(11, 11, 15)' && fabBorder.includes('184, 150, 62'));
 
 // Hero text
 const heroH1 = await page.locator('.hero h1').first().textContent();
-log('hero_h1', heroH1.replace(/\s+/g, ' ').trim().slice(0, 80), heroH1.includes('renove'));
+log('hero_h1', heroH1.replace(/\s+/g, ' ').trim().slice(0, 80), heroH1.includes('restauração'));
 
-// Skeuomorphic — red glow on hero portrait
-const heroGlow = await page.locator('.hero-portrait').first().evaluate(el => getComputedStyle(el).boxShadow);
-log('hero_portrait_red_glow', heroGlow.includes('203, 44, 48') || heroGlow.includes('rgb(203'), heroGlow.length > 0);
+// Quiet luxury palette checks
+const bodyBg = await page.locator('body').evaluate(el => getComputedStyle(el).backgroundColor);
+log('body_near_black', bodyBg === 'rgb(11, 11, 15)', bodyBg === 'rgb(11, 11, 15)');
+const btnGold = await page.locator('.btn-gold').first().evaluate(el => getComputedStyle(el).backgroundColor);
+log('btn_gold_amber', btnGold === 'rgb(184, 150, 62)', btnGold === 'rgb(184, 150, 62)');
+const serifFont = await page.locator('.hero h1').evaluate(el => getComputedStyle(el).fontFamily);
+log('serif_font', serifFont.toLowerCase().includes('cormorant') || serifFont.toLowerCase().includes('garamond'), serifFont.toLowerCase().includes('cormorant') || serifFont.toLowerCase().includes('garamond'));
 
 // Service cards count
 const serviceCount = await page.locator('.service-card').count();
