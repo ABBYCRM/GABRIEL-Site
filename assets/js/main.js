@@ -1,66 +1,76 @@
-// Dr. Gabriel Galeb — site interactions
+/**
+ * Progressive enhancement only. Every section is readable and every link works
+ * with this file blocked — nothing here controls whether content is visible.
+ */
 (() => {
   'use strict';
 
-  // Mobile menu toggle
-  const toggle = document.getElementById('menuToggle');
-  const links = document.getElementById('navLinks');
-  if (toggle && links) {
-    toggle.addEventListener('click', () => {
-      const isOpen = links.classList.toggle('open');
-      toggle.setAttribute('aria-expanded', String(isOpen));
-      toggle.setAttribute('aria-label', isOpen ? 'Fechar menu' : 'Abrir menu');
-      toggle.textContent = isOpen ? '✕' : '☰';
-    });
-    // Close menu on link click (mobile UX)
-    links.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => {
-        if (links.classList.contains('open')) {
-          links.classList.remove('open');
-          toggle.setAttribute('aria-expanded', 'false');
-          toggle.setAttribute('aria-label', 'Abrir menu');
-          toggle.textContent = '☰';
-        }
-      });
-    });
-  }
+  /* Mobile navigation ----------------------------------------------------- */
+  const burger = document.getElementById('burger');
+  const nav = document.getElementById('nav');
+  const masthead = document.getElementById('masthead');
 
-  // Subtle scroll-reveal via IntersectionObserver
-  const observed = document.querySelectorAll('section, .service-card, .diff, .step, .t-card, .gallery-item');
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) {
-          e.target.style.opacity = '1';
-          e.target.style.transform = 'translateY(0)';
-          io.unobserve(e.target);
-        }
-      });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+  if (burger && nav) {
+    const setOpen = (open) => {
+      nav.dataset.open = String(open);
+      burger.setAttribute('aria-expanded', String(open));
+      burger.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+    };
 
-    observed.forEach((el) => {
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(16px)';
-      el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-      io.observe(el);
+    burger.addEventListener('click', () => setOpen(nav.dataset.open !== 'true'));
+    nav.addEventListener('click', (e) => {
+      if (e.target.closest('a')) setOpen(false);
     });
-  }
-
-  // FAQ: only one open at a time
-  const items = document.querySelectorAll('.faq-item');
-  items.forEach((it) => {
-    it.addEventListener('toggle', () => {
-      if (it.open) {
-        items.forEach((other) => { if (other !== it) other.open = false; });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && nav.dataset.open === 'true') {
+        setOpen(false);
+        burger.focus();
       }
     });
-  });
 
-  // Track CTA clicks (for owner analytics — no external calls)
-  document.querySelectorAll('a[href*="wa.me"]').forEach((a) => {
-    a.addEventListener('click', () => {
-      // Placeholder for analytics hook
-      try { console.info('[Gabriel Site] WhatsApp CTA click'); } catch (e) {}
+    // The panel drops from under the sticky header, whose height changes with
+    // the top bar scrolling out of view.
+    const syncOffset = () => {
+      const rect = masthead?.getBoundingClientRect();
+      if (rect) nav.style.setProperty('--nav-top', `${Math.max(rect.bottom, 0)}px`);
+    };
+    syncOffset();
+    addEventListener('resize', syncOffset, { passive: true });
+    addEventListener('scroll', syncOffset, { passive: true });
+  }
+
+  /* Condensed header on scroll -------------------------------------------- */
+  if (masthead) {
+    const onScroll = () => {
+      masthead.dataset.scrolled = String(scrollY > 24);
+    };
+    onScroll();
+    addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  /* Before/after lightbox -------------------------------------------------- */
+  const dialog = document.getElementById('lightbox');
+  const dialogImg = document.getElementById('lightbox-img');
+  const dialogCaption = document.getElementById('lightbox-caption');
+
+  if (dialog && typeof dialog.showModal === 'function') {
+    document.addEventListener('click', (e) => {
+      const trigger = e.target.closest('[data-zoom]');
+      if (trigger) {
+        const shot = trigger.closest('.case__shot')?.querySelector('img');
+        dialogImg.src = trigger.dataset.zoom;
+        dialogImg.alt = shot?.alt || '';
+        dialogCaption.textContent = trigger.dataset.caption || '';
+        dialog.showModal();
+        return;
+      }
+      // Clicking the backdrop lands on the dialog element itself.
+      if (e.target.closest('[data-close]') || e.target === dialog) dialog.close();
     });
-  });
+    dialog.addEventListener('close', () => {
+      dialogImg.removeAttribute('src');
+    });
+  } else {
+    document.querySelectorAll('.case__zoom').forEach((el) => el.remove());
+  }
 })();
