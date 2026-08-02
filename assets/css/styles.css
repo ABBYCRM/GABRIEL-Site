@@ -1098,6 +1098,13 @@ footer a:hover { color: var(--gold); }
 footer ul { list-style: none; }
 footer li { margin-bottom: 10px; }
 .footer-brand p { margin-top: 16px; line-height: 1.8; max-width: 360px; }
+.brand-logo {
+  height: 40px;
+  width: auto;
+  background: var(--cream);
+  padding: 6px 12px;
+  border-radius: 2px;
+}
 
 .footer-bottom {
   border-top: 1px solid var(--ink-line);
