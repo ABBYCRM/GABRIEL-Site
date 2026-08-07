@@ -57,6 +57,38 @@
     range.addEventListener('input', () => set(range.value), { passive: true });
   });
 
+  /* Soft gold spotlight on treatment paths -------------------------------- */
+  if (!reduceMotion && matchMedia('(pointer: fine)').matches) {
+    document.querySelectorAll('[data-spotlight]').forEach((el) => {
+      let ticking = false;
+      el.addEventListener('pointermove', (e) => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          const r = el.getBoundingClientRect();
+          const x = ((e.clientX - r.left) / r.width) * 100;
+          const y = ((e.clientY - r.top) / r.height) * 100;
+          el.style.setProperty('--mx', `${x.toFixed(1)}%`);
+          el.style.setProperty('--my', `${y.toFixed(1)}%`);
+          ticking = false;
+        });
+      }, { passive: true });
+    });
+  }
+
+  /* Pause spinning gold frames when off-screen ---------------------------- */
+  if ('IntersectionObserver' in window) {
+    const frames = document.querySelectorAll('.glow-frame');
+    if (frames.length) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          entry.target.style.animationPlayState = entry.isIntersecting ? 'running' : 'paused';
+        });
+      }, { rootMargin: '10% 0px' });
+      frames.forEach((f) => io.observe(f));
+    }
+  }
+
   /* 3D coverflow gallery (vanilla — site gold/navy palette) --------------- */
   document.querySelectorAll('[data-coverflow]').forEach((root) => {
     const cards = [...root.querySelectorAll('.coverflow__card')];
