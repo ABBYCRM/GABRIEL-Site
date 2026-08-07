@@ -917,7 +917,7 @@ pages.push({
     ],
   },
   body: `
-  <section class="section">
+  <section class="section section--dark">
     <div class="shell">
       <div class="coverflow-stage">
         <div class="coverflow" data-coverflow tabindex="0" aria-roledescription="carrossel" aria-label="Galeria coverflow de casos antes e depois">
