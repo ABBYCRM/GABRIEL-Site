@@ -231,6 +231,7 @@
 
 /* 116 — skip rendering far-off cards (not coverflow — absolute 3D deck) */
 .card,
+.offer,
 .ba-slide,
 .quote {
   content-visibility: auto;
