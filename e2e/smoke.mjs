@@ -68,12 +68,14 @@ for (const sel of ['.topbar', '.masthead', '.hero', '#tratamentos', '#resultados
 const wa = await page.locator('a[href*="wa.me"]').count();
 log('whatsapp_ctas', wa, wa >= 3);
 
-const cases = await page.locator('.ba-slide').count();
+const cases = await page.locator('.coverflow__card').count();
 log('home_cases', cases, cases >= 3);
 const compares = await page.locator('[data-compare]').count();
 log('compare_sliders', compares, compares >= 3);
-const carousel = await page.locator('[data-carousel]').count();
-log('css_carousel', carousel, carousel >= 1);
+const carousel = await page.locator('[data-coverflow]').count();
+log('coverflow_carousel', carousel, carousel >= 1);
+const hero = await page.locator('.coverflow__card.is-hero').count();
+log('coverflow_hero', hero, hero >= 1);
 
 // Drag the compare range and confirm --pos updates
 const posBefore = await page.locator('[data-compare]').first().evaluate((el) => el.style.getPropertyValue('--pos'));

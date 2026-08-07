@@ -223,12 +223,13 @@
   .btn,
   .burger,
   .ba-carousel__btn,
+  .coverflow__controls button,
   .compare__range {
     min-block-size: 44px;
   }
 }
 
-/* 116 — skip rendering far-off cards */
+/* 116 — skip rendering far-off cards (not coverflow — absolute 3D deck) */
 .card,
 .ba-slide,
 .quote {
@@ -362,8 +363,243 @@
 }
 
 /* ==========================================================================
-   CSS CAROUSEL — scroll-snap rail (pattern 091) + dots / prev-next
+   3D COVERFLOW — perspective deck (site gold / midnight navy, no neon)
    ========================================================================== */
+.coverflow-stage {
+  position: relative;
+  margin-inline: calc(50% - 50vw);
+  inline-size: 100vw;
+  padding-block: clamp(1.5rem, 1rem + 2vw, 3rem) 1rem;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 42%, rgb(201 169 97 / 0.1), transparent 62%),
+    radial-gradient(ellipse 90% 70% at 50% 100%, rgb(15 20 36 / 0.55), transparent 70%),
+    linear-gradient(180deg, var(--ink-2) 0%, var(--ink) 55%, var(--ink-2) 100%);
+  overflow: hidden;
+}
+.coverflow-stage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 12% 22%, rgb(224 200 143 / 0.35), transparent),
+    radial-gradient(1px 1px at 78% 18%, rgb(201 169 97 / 0.28), transparent),
+    radial-gradient(1px 1px at 34% 68%, rgb(224 200 143 / 0.22), transparent),
+    radial-gradient(1px 1px at 88% 62%, rgb(201 169 97 / 0.2), transparent),
+    radial-gradient(1px 1px at 55% 12%, rgb(250 247 241 / 0.12), transparent);
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.coverflow {
+  position: relative;
+  z-index: 1;
+  max-inline-size: 72rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  outline: none;
+}
+.coverflow:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 6px;
+}
+
+.coverflow__deck {
+  --cover-w: min(28rem, 78vw);
+  --cover-h: calc(var(--cover-w) * 0.72);
+  position: relative;
+  inline-size: 100%;
+  block-size: calc(var(--cover-h) + 5.5rem);
+  perspective: 1800px;
+  perspective-origin: 50% 45%;
+  transform-style: preserve-3d;
+}
+
+.coverflow__card {
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  inline-size: var(--cover-w);
+  transform-style: preserve-3d;
+  transform-origin: center center;
+  will-change: transform;
+  cursor: pointer;
+  /* transform set by JS: translate(-50%,-50%) translate3d(...) rotateY scale */
+}
+.coverflow__card.is-hero {
+  cursor: default;
+  z-index: 20;
+}
+.coverflow__card:not(.is-hero) {
+  z-index: 1;
+}
+
+.coverflow__face {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto auto;
+  border-radius: 0.85rem;
+  overflow: hidden;
+  background: var(--ink-3);
+  border: 1px solid rgb(201 169 97 / 0.22);
+  box-shadow:
+    0 18px 40px rgb(0 0 0 / 0.35),
+    inset 0 0 0 1px rgb(255 255 255 / 0.03);
+  transition:
+    border-color 0.45s var(--ease),
+    box-shadow 0.45s var(--ease);
+}
+.coverflow__card.is-hero .coverflow__face {
+  border-color: rgb(224 200 143 / 0.72);
+  box-shadow:
+    0 0 0 1px rgb(201 169 97 / 0.45),
+    0 0 28px rgb(201 169 97 / 0.28),
+    0 48px 96px rgb(0 0 0 / 0.55),
+    inset 0 0 0 1px rgb(224 200 143 / 0.12);
+}
+.coverflow__card:not(.is-hero) .coverflow__face {
+  border-color: rgb(201 169 97 / 0.16);
+  box-shadow:
+    0 12px 32px rgb(0 0 0 / 0.4),
+    0 0 18px rgb(158 124 56 / 0.08);
+}
+
+.coverflow__index {
+  position: absolute;
+  z-index: 3;
+  inset-block-start: 0.75rem;
+  inset-inline-start: 0.85rem;
+  font-family: var(--font-display, 'Cormorant Garamond', Georgia, serif);
+  font-size: 0.95rem;
+  letter-spacing: 0.12em;
+  color: var(--gold-bright);
+  text-shadow: 0 1px 8px rgb(0 0 0 / 0.55);
+  pointer-events: none;
+}
+
+.coverflow__card .compare {
+  border: 0;
+  border-radius: 0;
+}
+.coverflow__card:not(.is-hero) .compare__range,
+.coverflow__card:not(.is-hero) .compare__handle,
+.coverflow__card:not(.is-hero) .compare__tag {
+  pointer-events: none;
+  opacity: 0.35;
+}
+.coverflow__card:not(.is-hero) .compare__range {
+  visibility: hidden;
+}
+
+.coverflow__meta {
+  padding: 1rem 1.15rem 1.15rem;
+  background: linear-gradient(180deg, var(--ink-3), var(--ink-2));
+  border-block-start: 1px solid rgb(201 169 97 / 0.14);
+  color: var(--bone);
+}
+.coverflow__meta h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  color: var(--bone);
+}
+.coverflow__meta p {
+  margin: 0.35rem 0 0;
+  font-size: 0.88rem;
+  color: rgb(250 247 241 / 0.62);
+}
+
+.coverflow__controls,
+.ba-carousel__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-block-start: 1.5rem;
+  position: relative;
+  z-index: 2;
+}
+.ba-carousel__btn,
+.coverflow__controls .ba-carousel__btn {
+  display: grid;
+  place-items: center;
+  inline-size: 2.75rem;
+  block-size: 2.75rem;
+  border: 1px solid rgb(201 169 97 / 0.35);
+  color: var(--gold);
+  background: rgb(10 13 24 / 0.72);
+  transition: background 0.3s var(--ease), color 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+.ba-carousel__btn:hover,
+.coverflow__controls .ba-carousel__btn:hover {
+  background: var(--gold);
+  color: var(--ink);
+  border-color: var(--gold);
+}
+.ba-carousel__btn svg {
+  inline-size: 1rem;
+  block-size: 1rem;
+}
+.ba-carousel__dots {
+  display: flex;
+  gap: 0.55rem;
+  align-items: center;
+}
+.ba-carousel__dots a,
+.ba-carousel__dots button {
+  inline-size: 0.55rem;
+  block-size: 0.55rem;
+  padding: 0;
+  border-radius: 999px;
+  background: rgb(250 247 241 / 0.28);
+  border: 1px solid transparent;
+  transition: inline-size 0.3s var(--ease), background 0.3s var(--ease);
+  cursor: pointer;
+}
+.ba-carousel__dots a[aria-current='true'],
+.ba-carousel__dots a:hover,
+.ba-carousel__dots button[aria-current='true'],
+.ba-carousel__dots button:hover {
+  inline-size: 1.4rem;
+  background: var(--gold);
+}
+
+.coverflow__hint {
+  text-align: center;
+  margin: 1rem 0 0;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  color: rgb(250 247 241 / 0.5);
+  position: relative;
+  z-index: 2;
+}
+
+/* Light-page controls when coverflow sits on bone sections */
+.section:not(.section--dark) .coverflow-stage + .disclaimer {
+  margin-block-start: 2rem;
+}
+
+@media (max-width: 640px) {
+  .coverflow__deck {
+    --cover-w: min(20.5rem, 86vw);
+    block-size: calc(var(--cover-h) + 6.25rem);
+  }
+  .coverflow__meta h3 {
+    font-size: 1.05rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .coverflow__deck {
+    perspective: none;
+  }
+  .coverflow__card {
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .coverflow__card:not(.is-hero) {
+    opacity: 0.22;
+  }
+}
+
+/* Legacy scroll-snap slides (kept for any residual markup) */
 .ba-carousel {
   position: relative;
   container-type: inline-size;
@@ -380,10 +616,6 @@
   padding-block-end: 0.5rem;
   outline: none;
 }
-.ba-carousel__rail:focus-visible {
-  outline: 2px solid var(--gold);
-  outline-offset: 4px;
-}
 .ba-slide {
   --i: 0;
   flex: 0 0 min(100%, 52rem);
@@ -394,11 +626,6 @@
   background: var(--bone);
   display: grid;
   grid-template-rows: auto auto;
-  animation: enter-soft 0.55s var(--ease) both;
-  animation-delay: calc(var(--i) * 80ms);
-}
-.ba-slide .compare {
-  border-block-end: 1px solid var(--hairline-light);
 }
 .ba-slide__info {
   display: flex;
@@ -407,63 +634,6 @@
   gap: 0.75rem 2rem;
   padding: 1.4rem clamp(1.1rem, 0.6rem + 1.4vw, 1.9rem);
 }
-.ba-slide__info h3 {
-  font-size: 1.3rem;
-  margin-inline-end: auto;
-}
-
-.ba-carousel__controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin-block-start: 1.75rem;
-}
-.ba-carousel__btn {
-  display: grid;
-  place-items: center;
-  inline-size: 2.75rem;
-  block-size: 2.75rem;
-  border: 1px solid var(--hairline-light);
-  color: var(--ink-2);
-  background: var(--bone);
-  transition: background 0.3s var(--ease), color 0.3s var(--ease), border-color 0.3s var(--ease);
-}
-.ba-carousel__btn:hover {
-  background: var(--ink);
-  color: var(--gold);
-  border-color: var(--ink);
-}
-.ba-carousel__btn svg {
-  inline-size: 1rem;
-  block-size: 1rem;
-}
-.ba-carousel__dots {
-  display: flex;
-  gap: 0.55rem;
-  align-items: center;
-}
-.ba-carousel__dots a {
-  inline-size: 0.55rem;
-  block-size: 0.55rem;
-  border-radius: 999px;
-  background: color-mix(in oklab, var(--ink) 18%, transparent);
-  border: 1px solid transparent;
-  transition: inline-size 0.3s var(--ease), background 0.3s var(--ease);
-}
-.ba-carousel__dots a[aria-current='true'],
-.ba-carousel__dots a:hover {
-  inline-size: 1.4rem;
-  background: var(--gold);
-}
-
-@container (width < 40rem) {
-  .ba-slide {
-    flex-basis: 92%;
-  }
-}
-
-/* Dark section variant */
 .section--dark .ba-slide {
   background: var(--ink-2);
   border-color: rgb(255 255 255 / 0.08);
@@ -500,7 +670,8 @@
 }
 
 /* 048 — highlight the URL target case */
-.ba-slide:target {
+.ba-slide:target,
+.coverflow__card:target .coverflow__face {
   outline: 2px solid var(--gold);
   outline-offset: 4px;
 }
@@ -524,8 +695,8 @@
   border: 0;
 }
 
-/* Legacy stacked cases still used on /resultados/ — keep them, but
-   also style any .cases that wrap a carousel gracefully */
-.cases:has(.ba-carousel) {
+/* Legacy stacked cases — wrap carousel / coverflow gracefully */
+.cases:has(.ba-carousel),
+.cases:has(.coverflow-stage) {
   display: block;
 }

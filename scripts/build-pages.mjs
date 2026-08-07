@@ -243,28 +243,32 @@ function picture(base, widths, sizes, alt, { w, h, loading = 'lazy' } = {}) {
             </picture>`;
 }
 
-function compareSlide({ id, i, pos, before, after, title, facts, loading = 'lazy' }) {
-  const sizes = '(max-width:900px) 92vw, 52rem';
+function coverflowCard({ id, i, pos, before, after, title, subtitle, loading = 'lazy', hero = false }) {
+  const sizes = '(max-width: 900px) 78vw, 28rem';
   const widths = [640, 960, 1440];
+  const num = String(i + 1).padStart(2, '0');
   return `
-          <article class="ba-slide" id="${id}" style="--i:${i}">
-            <div class="compare" style="--pos: ${pos}%" data-compare>
-              <div class="compare__layer compare__after">
-                ${picture(after.base, widths, sizes, after.alt, { w: 960, h: 540, loading })}
+            <article class="coverflow__card${hero ? ' is-hero' : ''}" id="${id}" data-index="${i}">
+              <div class="coverflow__face">
+                <span class="coverflow__index" aria-hidden="true">${num}</span>
+                <div class="compare" style="--pos: ${pos}%" data-compare>
+                  <div class="compare__layer compare__after">
+                    ${picture(after.base, widths, sizes, after.alt, { w: 960, h: 540, loading })}
+                  </div>
+                  <div class="compare__layer compare__before">
+                    ${picture(before.base, widths, sizes, before.alt, { w: 960, h: 540, loading })}
+                  </div>
+                  <span class="compare__tag compare__tag--before">Antes</span>
+                  <span class="compare__tag compare__tag--after">Depois</span>
+                  <div class="compare__handle" aria-hidden="true"></div>
+                  <input class="compare__range" type="range" min="0" max="100" value="${pos}" aria-label="Arraste para comparar antes e depois do ${id}">
+                </div>
+                <div class="coverflow__meta">
+                  <h3>${title}</h3>
+                  <p>${subtitle}</p>
+                </div>
               </div>
-              <div class="compare__layer compare__before">
-                ${picture(before.base, widths, sizes, before.alt, { w: 960, h: 540, loading })}
-              </div>
-              <span class="compare__tag compare__tag--before">Antes</span>
-              <span class="compare__tag compare__tag--after">Depois</span>
-              <div class="compare__handle" aria-hidden="true"></div>
-              <input class="compare__range" type="range" min="0" max="100" value="${pos}" aria-label="Arraste para comparar antes e depois do ${id}">
-            </div>
-            <div class="ba-slide__info">
-              <h2 style="font-size:1.35rem;margin:0;margin-inline-end:auto">${title}</h2>
-              <dl class="case__facts">${facts}</dl>
-            </div>
-          </article>`;
+            </article>`;
 }
 
 const pages = [];
@@ -915,42 +919,45 @@ pages.push({
   body: `
   <section class="section">
     <div class="shell">
-      <div class="ba-carousel" data-carousel>
-        <div class="ba-carousel__rail" tabindex="0" aria-label="Carrossel de casos antes e depois">
-          ${compareSlide({
-            id: 'caso-01', i: 0, pos: 52, loading: 'eager',
+      <div class="coverflow-stage">
+        <div class="coverflow" data-coverflow tabindex="0" aria-roledescription="carrossel" aria-label="Galeria coverflow de casos antes e depois">
+          <div class="coverflow__deck">
+          ${coverflowCard({
+            id: 'caso-01', i: 0, pos: 52, loading: 'eager', hero: true,
             before: { base: 'case-01-antes', alt: 'Antes: linha frontal recuada e fios miniaturizados' },
             after: { base: 'case-01-depois', alt: 'Depois: linha frontal reconstruída com densidade natural' },
-            title: 'Caso 01 &middot; reconstrução da linha frontal',
-            facts: `<div><b>Perfil</b><dd>Homem, calvície frontal</dd></div><div><b>Técnica</b><dd>FUE</dd></div><div><b>Registro</b><dd>Resultado consolidado</dd></div>`,
+            title: 'Reconstrução da linha frontal',
+            subtitle: 'Homem &middot; FUE &middot; Resultado consolidado',
           })}
-          ${compareSlide({
+          ${coverflowCard({
             id: 'caso-02', i: 1, pos: 50,
             before: { base: 'case-02-antes', alt: 'Antes: calvície avançada sem fios na região frontal' },
             after: { base: 'case-02-depois', alt: 'Depois: nova linha frontal implantada em fase inicial' },
-            title: 'Caso 02 &middot; calvície avançada',
-            facts: `<div><b>Perfil</b><dd>Homem, Norwood alto</dd></div><div><b>Técnica</b><dd>FUE, área extensa</dd></div><div><b>Registro</b><dd>Pós-operatório inicial</dd></div>`,
+            title: 'Calvície avançada',
+            subtitle: 'Homem &middot; FUE área extensa &middot; Pós-operatório inicial',
           })}
-          ${compareSlide({
+          ${coverflowCard({
             id: 'caso-03', i: 2, pos: 48,
             before: { base: 'case-03-antes', alt: 'Antes: risca alargada e rarefação central' },
             after: { base: 'case-03-depois', alt: 'Depois: risca fechada e maior densidade' },
-            title: 'Caso 03 &middot; densificação feminina',
-            facts: `<div><b>Perfil</b><dd>Mulher, rarefação central</dd></div><div><b>Abordagem</b><dd>Protocolo capilar</dd></div><div><b>Registro</b><dd>Mesma risca, mesmo ângulo</dd></div>`,
+            title: 'Densificação feminina',
+            subtitle: 'Mulher &middot; Protocolo capilar &middot; Mesma risca',
           })}
-        </div>
-        <div class="ba-carousel__controls">
-          <button class="ba-carousel__btn" type="button" data-carousel-prev aria-label="Caso anterior">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
-          </button>
-          <div class="ba-carousel__dots" role="tablist" aria-label="Ir para o caso">
-            <a href="#caso-01" aria-label="Caso 01" aria-current="true"></a>
-            <a href="#caso-02" aria-label="Caso 02"></a>
-            <a href="#caso-03" aria-label="Caso 03"></a>
           </div>
-          <button class="ba-carousel__btn" type="button" data-carousel-next aria-label="Próximo caso">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
-          </button>
+          <div class="coverflow__controls">
+            <button class="ba-carousel__btn" type="button" data-coverflow-prev aria-label="Caso anterior">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+            </button>
+            <div class="ba-carousel__dots" data-coverflow-dots role="tablist" aria-label="Ir para o caso">
+              <button type="button" aria-label="Caso 01" aria-current="true"></button>
+              <button type="button" aria-label="Caso 02"></button>
+              <button type="button" aria-label="Caso 03"></button>
+            </div>
+            <button class="ba-carousel__btn" type="button" data-coverflow-next aria-label="Próximo caso">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+          <p class="coverflow__hint">Arraste o controle dourado para comparar &middot; Clique nas laterais ou use as setas</p>
         </div>
       </div>
 
@@ -958,7 +965,7 @@ pages.push({
         Imagens de pacientes reais, publicadas com autorização expressa e finalidade educativa, conforme a
         Resolução CFM nº 2.336/2023. Resultados variam conforme a densidade da área doadora, o grau de
         calvície, a resposta individual e a adesão ao pós-operatório. Nenhuma imagem constitui promessa ou
-        garantia de resultado. Arraste o controle no centro de cada foto para comparar.
+        garantia de resultado. Arraste o controle no centro da foto em destaque para comparar.
       </p>
     </div>
   </section>
