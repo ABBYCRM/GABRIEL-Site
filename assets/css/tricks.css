@@ -1,0 +1,531 @@
+/* ==========================================================================
+   CSS pattern pack — adapted from the 120-trick collection to the Galeb
+   palette (midnight / champagne / bone). Neon cyan & purple intentionally
+   remapped to gold so the site stays luxe, not loud.
+   Patterns used: 001–009, 011–014, 021–030, 031–037, 041–049, 051, 057,
+   069–072, 075, 081–085, 090–098, 105, 111–116, 119 + carousel / compare.
+   ========================================================================== */
+
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@property --pos {
+  syntax: '<percentage>';
+  initial-value: 50%;
+  inherits: true;
+}
+
+/* 103 / 104 — declare color schemes; keep brand tokens authoritative */
+:root {
+  color-scheme: light dark;
+  accent-color: var(--gold);
+  --surface: var(--bone);
+  --text: var(--graphite);
+  scrollbar-gutter: stable;
+}
+
+/* 096 — reserve scrollbar space (above) */
+
+/* 090 — scroll-driven reading progress */
+.progress {
+  position: fixed;
+  inset: 0 auto auto 0;
+  z-index: 80;
+  inline-size: 100%;
+  block-size: 2px;
+  background: var(--gold);
+  transform-origin: left;
+  scale: 0 1;
+  pointer-events: none;
+}
+@supports (animation-timeline: scroll()) {
+  .progress {
+    animation: fill-bar linear;
+    animation-timeline: scroll(root block);
+  }
+}
+@keyframes fill-bar {
+  to {
+    scale: 1 1;
+  }
+}
+
+/* 001 — rotating conic-gradient glow, gold-only */
+.glow-frame {
+  position: relative;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--ink-2), var(--ink-2)) padding-box,
+    conic-gradient(
+        from var(--angle),
+        var(--gold-deep),
+        var(--gold-bright),
+        var(--gold),
+        transparent 40%,
+        transparent 60%,
+        var(--gold-deep)
+      )
+      border-box;
+  animation: spin-angle 8s linear infinite;
+}
+@keyframes spin-angle {
+  to {
+    --angle: 1turn;
+  }
+}
+
+/* 002 — static gold gradient border */
+.gold-border {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--ink-2), var(--ink-2)) padding-box,
+    linear-gradient(135deg, var(--gold-deep), var(--gold-bright), var(--gold-deep)) border-box;
+}
+
+/* 003 — restrained gold gradient text (display accents only) */
+.gradient-text {
+  color: transparent;
+  background: linear-gradient(90deg, var(--gold-deep), var(--gold-bright), var(--gold), var(--gold-deep));
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .gradient-text {
+    animation: hue-slide 10s linear infinite;
+  }
+}
+@keyframes hue-slide {
+  to {
+    background-position: 200% 0;
+  }
+}
+
+/* 004 — gradient underline */
+.fancy-link {
+  text-decoration: none;
+  background: linear-gradient(90deg, var(--gold-deep), var(--gold)) 0 100% / 100% 1px no-repeat;
+  padding-block-end: 0.15em;
+}
+
+/* 006 / 007 — elevation + inset hairline */
+.elevated {
+  box-shadow:
+    0 1px 2px rgb(10 13 24 / 0.06),
+    0 12px 30px rgb(10 13 24 / 0.12);
+}
+.hairline-inset {
+  box-shadow: inset 0 0 0 1px var(--hairline-light);
+}
+
+/* 008 — frosted glass (masthead already uses blur; strengthen) */
+.masthead {
+  background: rgb(10 13 24 / 0.72);
+  border-bottom: 1px solid rgb(255 255 255 / 0.08);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+}
+
+/* 009 — CSS spotlight on dark sections */
+.hero,
+.section--dark {
+  background-image: radial-gradient(circle at 78% 12%, rgb(201 169 97 / 0.14), transparent 34%),
+    radial-gradient(circle at 8% 88%, rgb(66 84 140 / 0.14), transparent 42%);
+  background-color: var(--ink);
+}
+.section--dark {
+  background-color: var(--ink);
+}
+
+/* 037 — tabular metrics */
+.stats b,
+.metric,
+.timer {
+  font-variant-numeric: tabular-nums;
+}
+
+/* 042 / 094 — scroll offset for in-page anchors */
+:is(section, [id]) {
+  scroll-margin-block-start: 6.5rem;
+}
+
+/* 046 already present; 069 selection already present */
+
+/* 049 — open details motion */
+.faq details[open] > summary {
+  color: var(--gold-deep);
+}
+.faq details[open] p {
+  animation: reveal-faq 0.25s var(--ease);
+}
+@keyframes reveal-faq {
+  from {
+    opacity: 0;
+    translate: 0 -0.25rem;
+  }
+}
+
+/* 041 — parent state via :has() */
+.faq details:has([open]),
+.faq details[open] {
+  background: color-mix(in oklab, var(--gold) 6%, transparent);
+}
+
+/* 075 — fade edge helper */
+.fade-bottom {
+  mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
+}
+
+/* 082 — stagger children */
+.stagger > * {
+  animation: enter-soft 0.55s var(--ease) both;
+  animation-delay: calc(var(--i, 0) * 90ms);
+}
+@keyframes enter-soft {
+  from {
+    opacity: 0;
+    translate: 0 0.85rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stagger > *,
+  .glow-frame,
+  .gradient-text,
+  .faq details[open] p {
+    animation: none !important;
+  }
+}
+
+/* 085 — individual transform props on interactive chips */
+.chip-lift {
+  translate: 0 0;
+  scale: 1;
+  transition: translate 0.25s var(--ease), scale 0.25s var(--ease);
+}
+@media (hover: hover) and (pointer: fine) {
+  .chip-lift:hover {
+    translate: 0 -0.15rem;
+    scale: 1.015;
+  }
+}
+
+/* 098 — safe areas on floating CTA */
+.fab {
+  inset-inline-end: max(1rem, env(safe-area-inset-right));
+  inset-block-end: max(1rem, env(safe-area-inset-bottom));
+}
+
+/* 115 — larger hit targets on coarse pointers */
+@media (pointer: coarse) {
+  .btn,
+  .burger,
+  .ba-carousel__btn,
+  .compare__range {
+    min-block-size: 44px;
+  }
+}
+
+/* 116 — skip rendering far-off cards */
+.card,
+.ba-slide,
+.quote {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 420px;
+}
+
+/* 023 — container queries for treatment cards */
+.cards {
+  container-type: inline-size;
+}
+@container (width >= 42rem) {
+  .card__body {
+    padding-block: 2rem;
+  }
+}
+
+/* 105 — brand hover via color-mix */
+.btn:hover {
+  background: color-mix(in oklab, var(--gold) 82%, white);
+}
+
+/* ==========================================================================
+   BEFORE / AFTER — interactive compare (clip-path + range)
+   ========================================================================== */
+.compare {
+  --pos: 50%;
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  aspect-ratio: 16 / 9;
+  background: var(--ink);
+  touch-action: pan-y;
+  user-select: none;
+}
+.compare__layer {
+  position: absolute;
+  inset: 0;
+}
+.compare__layer img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  object-position: 50% 20%;
+}
+.compare__before {
+  z-index: 1;
+  clip-path: inset(0 calc(100% - var(--pos)) 0 0);
+}
+.compare__after {
+  z-index: 0;
+}
+.compare__range {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  margin: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  appearance: none;
+  background: transparent;
+  cursor: ew-resize;
+}
+.compare__range::-webkit-slider-thumb {
+  appearance: none;
+  inline-size: 2px;
+  block-size: 100vh;
+  background: transparent;
+}
+.compare__range::-moz-range-thumb {
+  inline-size: 2px;
+  block-size: 100%;
+  border: 0;
+  background: transparent;
+}
+.compare__handle {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: var(--pos);
+  z-index: 3;
+  inline-size: 2px;
+  background: var(--gold);
+  transform: translateX(-50%);
+  pointer-events: none;
+  box-shadow: 0 0 0 1px rgb(10 13 24 / 0.35);
+}
+.compare__handle::before {
+  content: '';
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  translate: -50% -50%;
+  inline-size: 2.4rem;
+  block-size: 2.4rem;
+  border-radius: 999px;
+  background: var(--ink);
+  border: 1px solid var(--gold);
+  box-shadow: 0 8px 24px rgb(10 13 24 / 0.35);
+  background-image: linear-gradient(var(--gold), var(--gold)), linear-gradient(var(--gold), var(--gold));
+  background-position:
+    35% 50%,
+    65% 50%;
+  background-size:
+    1px 0.7rem,
+    1px 0.7rem;
+  background-repeat: no-repeat;
+}
+.compare__tag {
+  position: absolute;
+  z-index: 2;
+  inset-block-start: 0.85rem;
+  padding: 0.4em 0.9em;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  pointer-events: none;
+  backdrop-filter: blur(6px);
+}
+.compare__tag--before {
+  inset-inline-start: 0.85rem;
+  background: rgb(10 13 24 / 0.82);
+  border: 1px solid var(--hairline-dark);
+  color: var(--gold);
+}
+.compare__tag--after {
+  inset-inline-end: 0.85rem;
+  background: var(--gold);
+  border: 1px solid var(--gold);
+  color: var(--ink);
+}
+
+/* ==========================================================================
+   CSS CAROUSEL — scroll-snap rail (pattern 091) + dots / prev-next
+   ========================================================================== */
+.ba-carousel {
+  position: relative;
+  container-type: inline-size;
+}
+.ba-carousel__rail {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold-deep) transparent;
+  padding-block-end: 0.5rem;
+  outline: none;
+}
+.ba-carousel__rail:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+}
+.ba-slide {
+  --i: 0;
+  flex: 0 0 min(100%, 52rem);
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+  min-inline-size: 0;
+  border: 1px solid var(--hairline-light);
+  background: var(--bone);
+  display: grid;
+  grid-template-rows: auto auto;
+  animation: enter-soft 0.55s var(--ease) both;
+  animation-delay: calc(var(--i) * 80ms);
+}
+.ba-slide .compare {
+  border-block-end: 1px solid var(--hairline-light);
+}
+.ba-slide__info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 2rem;
+  padding: 1.4rem clamp(1.1rem, 0.6rem + 1.4vw, 1.9rem);
+}
+.ba-slide__info h3 {
+  font-size: 1.3rem;
+  margin-inline-end: auto;
+}
+
+.ba-carousel__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-block-start: 1.75rem;
+}
+.ba-carousel__btn {
+  display: grid;
+  place-items: center;
+  inline-size: 2.75rem;
+  block-size: 2.75rem;
+  border: 1px solid var(--hairline-light);
+  color: var(--ink-2);
+  background: var(--bone);
+  transition: background 0.3s var(--ease), color 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+.ba-carousel__btn:hover {
+  background: var(--ink);
+  color: var(--gold);
+  border-color: var(--ink);
+}
+.ba-carousel__btn svg {
+  inline-size: 1rem;
+  block-size: 1rem;
+}
+.ba-carousel__dots {
+  display: flex;
+  gap: 0.55rem;
+  align-items: center;
+}
+.ba-carousel__dots a {
+  inline-size: 0.55rem;
+  block-size: 0.55rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--ink) 18%, transparent);
+  border: 1px solid transparent;
+  transition: inline-size 0.3s var(--ease), background 0.3s var(--ease);
+}
+.ba-carousel__dots a[aria-current='true'],
+.ba-carousel__dots a:hover {
+  inline-size: 1.4rem;
+  background: var(--gold);
+}
+
+@container (width < 40rem) {
+  .ba-slide {
+    flex-basis: 92%;
+  }
+}
+
+/* Dark section variant */
+.section--dark .ba-slide {
+  background: var(--ink-2);
+  border-color: rgb(255 255 255 / 0.08);
+}
+.section--dark .ba-carousel__btn {
+  background: var(--ink);
+  border-color: var(--hairline-dark);
+  color: var(--gold);
+}
+
+/* Portrait gets the rotating gold frame */
+.portrait__frame.glow-frame {
+  padding: 0.6rem;
+}
+.portrait__frame.glow-frame img {
+  display: block;
+}
+
+/* 024 / 071 — ensure media always reserves space */
+.card__media,
+.compare {
+  aspect-ratio: 16 / 10;
+}
+.compare {
+  aspect-ratio: 16 / 9;
+}
+
+/* 030 — hover lift only on fine pointers */
+@media (hover: hover) and (pointer: fine) {
+  .card:hover,
+  .ba-slide:hover {
+    border-color: color-mix(in oklab, var(--gold) 40%, transparent);
+  }
+}
+
+/* 048 — highlight the URL target case */
+.ba-slide:target {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+}
+
+/* Lightbox backdrop already present — strengthen (070) */
+.lightbox::backdrop {
+  background: rgb(4 6 12 / 0.92);
+  backdrop-filter: blur(6px);
+}
+
+/* 111 — sr-only utility */
+.sr-only {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Legacy stacked cases still used on /resultados/ — keep them, but
+   also style any .cases that wrap a carousel gracefully */
+.cases:has(.ba-carousel) {
+  display: block;
+}

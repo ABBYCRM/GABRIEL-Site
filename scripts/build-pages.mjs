@@ -87,9 +87,11 @@ function shell(page) {
 <link rel="preload" href="/assets/fonts/cormorant-garamond-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/inter-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/css/styles.css">
+<link rel="stylesheet" href="/assets/css/tricks.css">
 <script type="application/ld+json">${JSON.stringify(schema)}</script>
 </head>
 <body>
+<div class="progress" aria-hidden="true"></div>
 <a class="skip" href="#main">Ir para o conteúdo</a>
 
 <div class="topbar">
@@ -232,12 +234,37 @@ ${body}
 function picture(base, widths, sizes, alt, { w, h, loading = 'lazy' } = {}) {
   const avif = widths.map((x) => `/assets/img/${base}-${x}.avif ${x}w`).join(', ');
   const webp = widths.map((x) => `/assets/img/${base}-${x}.webp ${x}w`).join(', ');
-  const jpg = `/assets/img/${base}-${widths[0]}.jpg`;
+  const mid = widths.includes(960) ? 960 : widths[Math.min(1, widths.length - 1)];
+  const jpg = `/assets/img/${base}-${mid}.jpg`;
   return `<picture>
               <source type="image/avif" srcset="${avif}" sizes="${sizes}">
               <source type="image/webp" srcset="${webp}" sizes="${sizes}">
               <img src="${jpg}" width="${w}" height="${h}" alt="${alt}" loading="${loading}" decoding="async">
             </picture>`;
+}
+
+function compareSlide({ id, i, pos, before, after, title, facts, loading = 'lazy' }) {
+  const sizes = '(max-width:900px) 92vw, 52rem';
+  const widths = [640, 960, 1440];
+  return `
+          <article class="ba-slide" id="${id}" style="--i:${i}">
+            <div class="compare" style="--pos: ${pos}%" data-compare>
+              <div class="compare__layer compare__after">
+                ${picture(after.base, widths, sizes, after.alt, { w: 960, h: 540, loading })}
+              </div>
+              <div class="compare__layer compare__before">
+                ${picture(before.base, widths, sizes, before.alt, { w: 960, h: 540, loading })}
+              </div>
+              <span class="compare__tag compare__tag--before">Antes</span>
+              <span class="compare__tag compare__tag--after">Depois</span>
+              <div class="compare__handle" aria-hidden="true"></div>
+              <input class="compare__range" type="range" min="0" max="100" value="${pos}" aria-label="Arraste para comparar antes e depois do ${id}">
+            </div>
+            <div class="ba-slide__info">
+              <h2 style="font-size:1.35rem;margin:0;margin-inline-end:auto">${title}</h2>
+              <dl class="case__facts">${facts}</dl>
+            </div>
+          </article>`;
 }
 
 const pages = [];
@@ -888,82 +915,50 @@ pages.push({
   body: `
   <section class="section">
     <div class="shell">
-      <div class="cases">
-        <article class="case" id="caso-01">
-          <div class="case__pair">
-            <figure class="case__shot">
-              <span class="case__tag">Antes</span>
-              ${picture('case-01-antes', [640, 960, 1440], '(max-width:640px) 92vw, 46vw', 'Antes do transplante: linha frontal recuada e fios miniaturizados', { w: 960, h: 540, loading: 'eager' })}
-              <button class="case__zoom" type="button" data-zoom="/assets/img/case-01-antes-1440.jpg" data-caption="Caso 01 — antes: entradas recuadas e miniaturização dos fios na região frontal." aria-label="Ampliar: caso 01, antes"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5M11 8v6M8 11h6"/></svg></span></button>
-            </figure>
-            <figure class="case__shot">
-              <span class="case__tag case__tag--after">Depois</span>
-              ${picture('case-01-depois', [640, 960, 1440], '(max-width:640px) 92vw, 46vw', 'Depois do transplante: linha frontal reconstruída com densidade natural', { w: 960, h: 540, loading: 'eager' })}
-              <button class="case__zoom" type="button" data-zoom="/assets/img/case-01-depois-1440.jpg" data-caption="Caso 01 — depois: linha frontal reconstruída, com transição gradual e densidade natural." aria-label="Ampliar: caso 01, depois"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5M11 8v6M8 11h6"/></svg></span></button>
-            </figure>
+      <div class="ba-carousel" data-carousel>
+        <div class="ba-carousel__rail" tabindex="0" aria-label="Carrossel de casos antes e depois">
+          ${compareSlide({
+            id: 'caso-01', i: 0, pos: 52, loading: 'eager',
+            before: { base: 'case-01-antes', alt: 'Antes: linha frontal recuada e fios miniaturizados' },
+            after: { base: 'case-01-depois', alt: 'Depois: linha frontal reconstruída com densidade natural' },
+            title: 'Caso 01 &middot; reconstrução da linha frontal',
+            facts: `<div><b>Perfil</b><dd>Homem, calvície frontal</dd></div><div><b>Técnica</b><dd>FUE</dd></div><div><b>Registro</b><dd>Resultado consolidado</dd></div>`,
+          })}
+          ${compareSlide({
+            id: 'caso-02', i: 1, pos: 50,
+            before: { base: 'case-02-antes', alt: 'Antes: calvície avançada sem fios na região frontal' },
+            after: { base: 'case-02-depois', alt: 'Depois: nova linha frontal implantada em fase inicial' },
+            title: 'Caso 02 &middot; calvície avançada',
+            facts: `<div><b>Perfil</b><dd>Homem, Norwood alto</dd></div><div><b>Técnica</b><dd>FUE, área extensa</dd></div><div><b>Registro</b><dd>Pós-operatório inicial</dd></div>`,
+          })}
+          ${compareSlide({
+            id: 'caso-03', i: 2, pos: 48,
+            before: { base: 'case-03-antes', alt: 'Antes: risca alargada e rarefação central' },
+            after: { base: 'case-03-depois', alt: 'Depois: risca fechada e maior densidade' },
+            title: 'Caso 03 &middot; densificação feminina',
+            facts: `<div><b>Perfil</b><dd>Mulher, rarefação central</dd></div><div><b>Abordagem</b><dd>Protocolo capilar</dd></div><div><b>Registro</b><dd>Mesma risca, mesmo ângulo</dd></div>`,
+          })}
+        </div>
+        <div class="ba-carousel__controls">
+          <button class="ba-carousel__btn" type="button" data-carousel-prev aria-label="Caso anterior">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+          </button>
+          <div class="ba-carousel__dots" role="tablist" aria-label="Ir para o caso">
+            <a href="#caso-01" aria-label="Caso 01" aria-current="true"></a>
+            <a href="#caso-02" aria-label="Caso 02"></a>
+            <a href="#caso-03" aria-label="Caso 03"></a>
           </div>
-          <div class="case__info">
-            <h2 style="font-size:1.35rem;margin:0;margin-right:auto">Caso 01 &middot; reconstrução da linha frontal</h2>
-            <dl class="case__facts">
-              <div><b>Perfil</b><dd>Homem, calvície frontal</dd></div>
-              <div><b>Técnica</b><dd>FUE</dd></div>
-              <div><b>Registro</b><dd>Resultado consolidado</dd></div>
-            </dl>
-          </div>
-        </article>
-
-        <article class="case" id="caso-02">
-          <div class="case__pair">
-            <figure class="case__shot">
-              <span class="case__tag">Antes</span>
-              ${picture('case-02-antes', [640, 960, 1440], '(max-width:640px) 92vw, 46vw', 'Antes do transplante: calvície avançada sem fios na região frontal e no topo', { w: 960, h: 540 })}
-              <button class="case__zoom" type="button" data-zoom="/assets/img/case-02-antes-1440.jpg" data-caption="Caso 02 — antes: calvície avançada, sem fios na região frontal e no topo." aria-label="Ampliar: caso 02, antes"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5M11 8v6M8 11h6"/></svg></span></button>
-            </figure>
-            <figure class="case__shot">
-              <span class="case__tag case__tag--after">Depois</span>
-              ${picture('case-02-depois', [640, 960, 1440], '(max-width:640px) 92vw, 46vw', 'Depois do transplante: nova linha frontal implantada em fase inicial de cicatrização', { w: 960, h: 540 })}
-              <button class="case__zoom" type="button" data-zoom="/assets/img/case-02-depois-1440.jpg" data-caption="Caso 02 — depois: nova linha frontal implantada; couro cabeludo ainda em fase de cicatrização (pós-operatório inicial)." aria-label="Ampliar: caso 02, depois"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5M11 8v6M8 11h6"/></svg></span></button>
-            </figure>
-          </div>
-          <div class="case__info">
-            <h2 style="font-size:1.35rem;margin:0;margin-right:auto">Caso 02 &middot; calvície avançada</h2>
-            <dl class="case__facts">
-              <div><b>Perfil</b><dd>Homem, Norwood alto</dd></div>
-              <div><b>Técnica</b><dd>FUE, área extensa</dd></div>
-              <div><b>Registro</b><dd>Pós-operatório inicial</dd></div>
-            </dl>
-          </div>
-        </article>
-
-        <article class="case" id="caso-03">
-          <div class="case__pair">
-            <figure class="case__shot">
-              <span class="case__tag">Antes</span>
-              ${picture('case-03-antes', [640, 960, 1440], '(max-width:640px) 92vw, 46vw', 'Antes do tratamento: alargamento da risca e rarefação em paciente feminina', { w: 960, h: 540 })}
-              <button class="case__zoom" type="button" data-zoom="/assets/img/case-03-antes-1440.jpg" data-caption="Caso 03 — antes: risca alargada e rarefação difusa na região central." aria-label="Ampliar: caso 03, antes"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5M11 8v6M8 11h6"/></svg></span></button>
-            </figure>
-            <figure class="case__shot">
-              <span class="case__tag case__tag--after">Depois</span>
-              ${picture('case-03-depois', [640, 960, 1440], '(max-width:640px) 92vw, 46vw', 'Depois do tratamento: risca fechada e maior densidade em paciente feminina', { w: 960, h: 540 })}
-              <button class="case__zoom" type="button" data-zoom="/assets/img/case-03-depois-1440.jpg" data-caption="Caso 03 — depois: risca fechada e recuperação de densidade na região central." aria-label="Ampliar: caso 03, depois"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5M11 8v6M8 11h6"/></svg></span></button>
-            </figure>
-          </div>
-          <div class="case__info">
-            <h2 style="font-size:1.35rem;margin:0;margin-right:auto">Caso 03 &middot; densificação feminina</h2>
-            <dl class="case__facts">
-              <div><b>Perfil</b><dd>Mulher, rarefação central</dd></div>
-              <div><b>Abordagem</b><dd>Protocolo capilar</dd></div>
-              <div><b>Registro</b><dd>Mesma risca, mesmo ângulo</dd></div>
-            </dl>
-          </div>
-        </article>
+          <button class="ba-carousel__btn" type="button" data-carousel-next aria-label="Próximo caso">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
+        </div>
       </div>
 
       <p class="disclaimer">
         Imagens de pacientes reais, publicadas com autorização expressa e finalidade educativa, conforme a
         Resolução CFM nº 2.336/2023. Resultados variam conforme a densidade da área doadora, o grau de
         calvície, a resposta individual e a adesão ao pós-operatório. Nenhuma imagem constitui promessa ou
-        garantia de resultado.
+        garantia de resultado. Arraste o controle no centro de cada foto para comparar.
       </p>
     </div>
   </section>

@@ -1,6 +1,7 @@
 /**
- * Progressive enhancement only. Every section is readable and every link works
- * with this file blocked — nothing here controls whether content is visible.
+ * Progressive enhancement only. The carousel still scrolls with native
+ * scroll-snap if this file is blocked; the compare still shows a 50/50 split
+ * via the CSS custom property set in markup.
  */
 (() => {
   'use strict';
@@ -28,8 +29,6 @@
       }
     });
 
-    // The panel drops from under the sticky header, whose height changes with
-    // the top bar scrolling out of view.
     const syncOffset = () => {
       const rect = masthead?.getBoundingClientRect();
       if (rect) nav.style.setProperty('--nav-top', `${Math.max(rect.bottom, 0)}px`);
@@ -48,7 +47,82 @@
     addEventListener('scroll', onScroll, { passive: true });
   }
 
-  /* Before/after lightbox -------------------------------------------------- */
+  /* Before/after compare sliders ------------------------------------------ */
+  document.querySelectorAll('[data-compare]').forEach((el) => {
+    const range = el.querySelector('.compare__range');
+    if (!range) return;
+    const set = (v) => el.style.setProperty('--pos', `${v}%`);
+    set(range.value);
+    range.addEventListener('input', () => set(range.value), { passive: true });
+  });
+
+  /* CSS scroll-snap carousel controls ------------------------------------- */
+  document.querySelectorAll('[data-carousel]').forEach((root) => {
+    const rail = root.querySelector('.ba-carousel__rail');
+    const slides = [...root.querySelectorAll('.ba-slide')];
+    const dots = [...root.querySelectorAll('.ba-carousel__dots a')];
+    const prev = root.querySelector('[data-carousel-prev]');
+    const next = root.querySelector('[data-carousel-next]');
+    if (!rail || !slides.length) return;
+
+    const go = (i) => {
+      const idx = (i + slides.length) % slides.length;
+      slides[idx].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    };
+
+    const currentIndex = () => {
+      const left = rail.scrollLeft;
+      let best = 0;
+      let bestDist = Infinity;
+      slides.forEach((s, i) => {
+        const d = Math.abs(s.offsetLeft - left);
+        if (d < bestDist) {
+          bestDist = d;
+          best = i;
+        }
+      });
+      return best;
+    };
+
+    const syncDots = () => {
+      const i = currentIndex();
+      dots.forEach((d, n) => d.setAttribute('aria-current', String(n === i)));
+    };
+
+    prev?.addEventListener('click', () => go(currentIndex() - 1));
+    next?.addEventListener('click', () => go(currentIndex() + 1));
+    dots.forEach((d, i) => {
+      d.addEventListener('click', (e) => {
+        e.preventDefault();
+        go(i);
+      });
+    });
+    rail.addEventListener('scroll', () => {
+      // rAF-throttle via flag
+      if (rail._ticking) return;
+      rail._ticking = true;
+      requestAnimationFrame(() => {
+        syncDots();
+        rail._ticking = false;
+      });
+    }, { passive: true });
+
+    // Keyboard when the rail is focused
+    rail.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        go(currentIndex() + 1);
+      }
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        go(currentIndex() - 1);
+      }
+    });
+
+    syncDots();
+  });
+
+  /* Before/after lightbox (legacy stacked galleries) ---------------------- */
   const dialog = document.getElementById('lightbox');
   const dialogImg = document.getElementById('lightbox-img');
   const dialogCaption = document.getElementById('lightbox-caption');
@@ -64,7 +138,6 @@
         dialog.showModal();
         return;
       }
-      // Clicking the backdrop lands on the dialog element itself.
       if (e.target.closest('[data-close]') || e.target === dialog) dialog.close();
     });
     dialog.addEventListener('close', () => {

@@ -68,8 +68,18 @@ for (const sel of ['.topbar', '.masthead', '.hero', '#tratamentos', '#resultados
 const wa = await page.locator('a[href*="wa.me"]').count();
 log('whatsapp_ctas', wa, wa >= 3);
 
-const cases = await page.locator('.case').count();
+const cases = await page.locator('.ba-slide').count();
 log('home_cases', cases, cases >= 3);
+const compares = await page.locator('[data-compare]').count();
+log('compare_sliders', compares, compares >= 3);
+const carousel = await page.locator('[data-carousel]').count();
+log('css_carousel', carousel, carousel >= 1);
+
+// Drag the compare range and confirm --pos updates
+const posBefore = await page.locator('[data-compare]').first().evaluate((el) => el.style.getPropertyValue('--pos'));
+await page.locator('.compare__range').first().fill('25');
+const posAfter = await page.locator('[data-compare]').first().evaluate((el) => el.style.getPropertyValue('--pos'));
+log('compare_updates_pos', `${posBefore}→${posAfter}`, posAfter.includes('25'));
 
 const bodyBg = await page.locator('body').evaluate((el) => getComputedStyle(el).backgroundColor);
 log('body_bone', bodyBg, bodyBg === 'rgb(250, 247, 241)');
