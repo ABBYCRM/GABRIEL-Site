@@ -57,24 +57,100 @@
     range.addEventListener('input', () => set(range.value), { passive: true });
   });
 
-  /* Soft gold spotlight on treatment paths -------------------------------- */
-  if (!reduceMotion && matchMedia('(pointer: fine)').matches) {
-    document.querySelectorAll('[data-spotlight]').forEach((el) => {
-      let ticking = false;
-      el.addEventListener('pointermove', (e) => {
-        if (ticking) return;
-        ticking = true;
-        requestAnimationFrame(() => {
-          const r = el.getBoundingClientRect();
-          const x = ((e.clientX - r.left) / r.width) * 100;
-          const y = ((e.clientY - r.top) / r.height) * 100;
-          el.style.setProperty('--mx', `${x.toFixed(1)}%`);
-          el.style.setProperty('--my', `${y.toFixed(1)}%`);
-          ticking = false;
-        });
-      }, { passive: true });
+  /* Soluções modern stacked carousel -------------------------------------- */
+  document.querySelectorAll('[data-sol-carousel]').forEach((root) => {
+    const cards = [...root.querySelectorAll('[data-sol-card]')];
+    const dots = [...root.querySelectorAll('[data-sol-dots] button')];
+    const prev = root.querySelector('[data-sol-prev]');
+    const next = root.querySelector('[data-sol-next]');
+    const nameEl = root.querySelector('[data-sol-name]');
+    const roleEl = root.querySelector('[data-sol-role]');
+    const copyEl = root.querySelector('[data-sol-copy]');
+    const linkEl = root.querySelector('[data-sol-link]');
+    if (!cards.length) return;
+
+    let index = Math.max(0, cards.findIndex((c) => c.classList.contains('is-active')));
+
+    const syncCaption = (card) => {
+      if (nameEl) nameEl.textContent = card.dataset.title || '';
+      if (roleEl) roleEl.textContent = card.dataset.role || '';
+      if (copyEl) copyEl.textContent = card.dataset.copy || '';
+      if (linkEl) {
+        const label = card.dataset.cta || 'Saiba mais';
+        linkEl.href = card.dataset.href || '#';
+        linkEl.innerHTML = `${label}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`;
+        if (card.dataset.external === 'true') {
+          linkEl.target = '_blank';
+          linkEl.rel = 'noopener';
+        } else {
+          linkEl.removeAttribute('target');
+          linkEl.removeAttribute('rel');
+        }
+      }
+    };
+
+    const render = () => {
+      const space = Math.min(92, root.clientWidth * 0.12);
+      cards.forEach((card, i) => {
+        const d = i - index;
+        const ad = Math.abs(d);
+        const x = d * space;
+        const scale = Math.max(0.72, 1 - ad * 0.14);
+        const active = d === 0;
+        card.style.transform =
+          `translate(-50%, -50%) translateX(${x}px) scale(${scale})`;
+        card.style.zIndex = String(20 - ad);
+        card.style.filter = active || reduceMotion
+          ? 'none'
+          : `grayscale(${Math.min(0.9, 0.55 + ad * 0.2)}) blur(${Math.min(2.2, ad * 1.1)}px) brightness(0.82)`;
+        card.style.opacity = active ? '1' : String(Math.max(0.45, 1 - ad * 0.22));
+        card.classList.toggle('is-active', active);
+        card.setAttribute('aria-hidden', active ? 'false' : 'true');
+      });
+      dots.forEach((d, n) => d.setAttribute('aria-current', String(n === index)));
+      syncCaption(cards[index]);
+    };
+
+    const go = (i) => {
+      index = (i + cards.length) % cards.length;
+      render();
+    };
+
+    prev?.addEventListener('click', () => go(index - 1));
+    next?.addEventListener('click', () => go(index + 1));
+    dots.forEach((d, i) => d.addEventListener('click', () => go(i)));
+    cards.forEach((card, i) => {
+      card.addEventListener('click', () => {
+        if (i !== index) go(i);
+      });
     });
-  }
+    root.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        go(index + 1);
+      }
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        go(index - 1);
+      }
+    });
+
+    let dragX = 0;
+    let dragging = false;
+    root.addEventListener('pointerdown', (e) => {
+      if (e.target.closest('.sol-carousel__arrow, .sol-carousel__dots, a')) return;
+      dragging = true;
+      dragX = e.clientX;
+    });
+    root.addEventListener('pointerup', (e) => {
+      if (!dragging) return;
+      dragging = false;
+      const dx = e.clientX - dragX;
+      if (Math.abs(dx) > 40) go(index + (dx < 0 ? 1 : -1));
+    });
+    addEventListener('resize', render, { passive: true });
+    render();
+  });
 
   /* Pause spinning gold frames when off-screen ---------------------------- */
   if ('IntersectionObserver' in window) {
