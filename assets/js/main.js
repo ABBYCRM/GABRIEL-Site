@@ -76,48 +76,6 @@
     });
   }
 
-  /* 3D parallax scenes (hero / 404) — pointer driven, gold/navy only ------ */
-  if (!reduceMotion && matchMedia('(pointer: fine)').matches) {
-    document.querySelectorAll('[data-parallax-scene]').forEach((scene) => {
-      const layers = [...scene.querySelectorAll('[data-parallax]')];
-      if (!layers.length) return;
-      let ticking = false;
-      let px = 0;
-      let py = 0;
-
-      const paint = () => {
-        layers.forEach((layer) => {
-          const sx = Number(layer.dataset.speedx || 0.02);
-          const sy = Number(layer.dataset.speedy || sx);
-          const rz = Number(layer.dataset.rotz || 0);
-          const x = px * sx * 80;
-          const y = py * sy * 60;
-          const rot = px * rz * 18;
-          layer.style.transform =
-            `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0) rotateY(${rot.toFixed(3)}deg)`;
-        });
-        scene.style.setProperty('--px', px.toFixed(3));
-        scene.style.setProperty('--py', py.toFixed(3));
-        ticking = false;
-      };
-
-      scene.addEventListener('pointermove', (e) => {
-        const r = scene.getBoundingClientRect();
-        px = ((e.clientX - r.left) / r.width - 0.5) * 2;
-        py = ((e.clientY - r.top) / r.height - 0.5) * 2;
-        if (ticking) return;
-        ticking = true;
-        requestAnimationFrame(paint);
-      }, { passive: true });
-
-      scene.addEventListener('pointerleave', () => {
-        px = 0;
-        py = 0;
-        requestAnimationFrame(paint);
-      }, { passive: true });
-    });
-  }
-
   /* Pause spinning gold frames when off-screen ---------------------------- */
   if ('IntersectionObserver' in window) {
     const frames = document.querySelectorAll('.glow-frame');
