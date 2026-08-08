@@ -834,8 +834,8 @@ strong {
 }
 .card:hover {
   border-color: var(--edge-gold);
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-panel), var(--glow-gold);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-panel);
 }
 .card__media {
   position: relative;
@@ -1092,8 +1092,7 @@ strong {
   transition: border-color 0.35s var(--ease), box-shadow 0.35s var(--ease);
 }
 .values li:hover {
-  border-color: var(--edge-gold-soft);
-  box-shadow: var(--glow-gold);
+  border-color: var(--edge-gold);
 }
 .values svg {
   width: 1.6rem;

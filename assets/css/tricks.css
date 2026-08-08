@@ -655,257 +655,64 @@
 }
 
 /* ==========================================================================
-   SOLUÇÕES — oversized spotlight carousel + champagne underglow
+   SOLUÇÕES — clinical three-path panels (same language as site cards)
+   Quiet, equal weight, no carousel theatrics — appropriate for a physician.
    ========================================================================== */
-.sol-section {
-  overflow: clip;
-}
-.sol-section em.gradient-text {
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-}
-.sol-section .section-head h2 {
+#tratamentos .section-head h2 {
   text-wrap: balance;
 }
-
-.sol-carousel {
-  position: relative;
-  outline: none;
-  margin-block-start: 0.5rem;
+#tratamentos .cards.paths {
+  grid-template-columns: 1fr;
+  gap: clamp(1.25rem, 0.75rem + 1.5vw, 1.75rem);
 }
-.sol-carousel:focus-visible {
-  outline: 2px solid var(--gold);
-  outline-offset: 8px;
-}
-
-.sol-carousel__controls {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.85rem;
-  margin-block-end: 1.25rem;
-}
-.sol-carousel__arrow {
-  display: grid;
-  place-items: center;
-  inline-size: 2.9rem;
-  block-size: 2.9rem;
-  border-radius: var(--radius);
-  border: 1px solid var(--edge-gold);
-  background: rgb(15 20 36 / 0.72);
-  color: var(--gold);
-  backdrop-filter: blur(10px);
-  transition: background 0.3s var(--ease), color 0.3s var(--ease), border-color 0.3s var(--ease);
-}
-.sol-carousel__arrow:hover {
-  background: var(--gold);
-  color: var(--ink);
-  border-color: var(--gold);
-}
-.sol-carousel__arrow svg {
-  inline-size: 1.05rem;
-  block-size: 1.05rem;
-}
-.sol-carousel__dots {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-}
-.sol-carousel__dots button {
-  inline-size: 0.55rem;
-  block-size: 0.55rem;
-  padding: 0;
-  border: 0;
-  border-radius: var(--radius-pill);
-  background: rgb(250 247 241 / 0.28);
-  cursor: pointer;
-  transition: inline-size 0.3s var(--ease), background 0.3s var(--ease);
-}
-.sol-carousel__dots button[aria-current='true'],
-.sol-carousel__dots button:hover {
-  inline-size: 1.55rem;
-  background: var(--gold);
-}
-
-.sol-carousel__stage {
-  --sol-w: min(38rem, 86vw);
-  --sol-h: min(24rem, calc(var(--sol-w) * 0.62));
-  position: relative;
-  inline-size: 100%;
-  block-size: calc(var(--sol-h) + 5.5rem);
-  perspective: 1600px;
-  transform-style: preserve-3d;
-}
-
-/* Soft champagne pool under the active card */
-.sol-carousel__glow {
-  position: absolute;
-  z-index: 0;
-  left: 50%;
-  bottom: 0.4rem;
-  inline-size: min(34rem, 78%);
-  block-size: 7.5rem;
-  translate: -50% 0;
-  background:
-    radial-gradient(ellipse 70% 55% at 50% 40%, rgb(224 200 143 / 0.55), transparent 72%),
-    radial-gradient(ellipse 90% 70% at 50% 70%, rgb(201 169 97 / 0.28), transparent 75%);
-  filter: blur(18px);
-  pointer-events: none;
-  opacity: 0.9;
-  animation: sol-glow-breathe 5.5s ease-in-out infinite;
-}
-@keyframes sol-glow-breathe {
-  0%,
-  100% {
-    opacity: 0.72;
-    scale: 0.96;
-  }
-  50% {
-    opacity: 1;
-    scale: 1.04;
+@media (min-width: 900px) {
+  #tratamentos .cards.paths {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: stretch;
   }
 }
 
-.sol-card {
-  position: absolute;
-  left: 50%;
-  top: 42%;
-  inline-size: var(--sol-w);
-  block-size: var(--sol-h);
-  border-radius: calc(var(--radius-panel) + 0.15rem);
-  overflow: hidden;
+/* Restrained clinical hover: gold edge only — no bloom / lift carnival */
+#tratamentos .card {
+  box-shadow: none;
   background: var(--surface-panel);
-  border: 1px solid var(--edge-dark);
-  transform-origin: center center;
-  cursor: pointer;
-  will-change: transform, filter, opacity;
-  isolation: isolate;
-  transition: border-color 0.45s var(--ease), box-shadow 0.45s var(--ease);
+  border-color: var(--edge-dark);
 }
-.sol-card.is-active {
-  border-color: rgb(224 200 143 / 0.55);
-  box-shadow:
-    0 0 0 1px rgb(201 169 97 / 0.28),
-    0 28px 60px rgb(0 0 0 / 0.45),
-    0 40px 90px rgb(201 169 97 / 0.22),
-    0 60px 120px rgb(201 169 97 / 0.12);
-  cursor: default;
-  z-index: 20;
+#tratamentos .card:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: var(--edge-gold);
 }
-.sol-card:not(.is-active) {
-  box-shadow: 0 16px 36px rgb(0 0 0 / 0.35);
+#tratamentos .card__media {
+  aspect-ratio: 16 / 11;
 }
-
-.sol-card__media {
+#tratamentos .card__media::after {
+  content: '';
   position: absolute;
   inset: 0;
-}
-.sol-card__media picture,
-.sol-card__media img {
-  display: block;
-  inline-size: 100%;
-  block-size: 100%;
-}
-.sol-card__media img {
-  object-fit: cover;
-  object-position: 50% 24%;
-  scale: 1.03;
-  transition: scale 1.1s var(--ease);
-}
-.sol-card.is-active .sol-card__media img {
-  scale: 1.07;
-}
-
-.sol-card__index {
-  position: absolute;
-  z-index: 3;
-  inset-block-start: 1.1rem;
-  inset-inline-start: 1.25rem;
-  font-family: var(--font-display);
-  font-size: clamp(2.4rem, 1.6rem + 2vw, 3.4rem);
-  line-height: 1;
-  color: var(--gold-bright);
-  text-shadow: 0 2px 16px rgb(0 0 0 / 0.55);
+  background: linear-gradient(180deg, transparent 55%, rgb(10 13 24 / 0.35));
   pointer-events: none;
 }
-
-.sol-card__veil {
-  position: absolute;
-  z-index: 2;
-  inset-inline: 0;
-  inset-block-end: 0;
-  padding: 3.5rem 1.5rem 1.4rem;
-  background: linear-gradient(180deg, transparent, rgb(10 13 24 / 0.22) 28%, rgb(10 13 24 / 0.88) 100%);
-  color: var(--bone);
-  opacity: 0;
-  translate: 0 0.4rem;
-  transition: opacity 0.4s var(--ease), translate 0.4s var(--ease);
-}
-.sol-card.is-active .sol-card__veil {
-  opacity: 1;
-  translate: 0 0;
-}
-.sol-card__veil .eyebrow {
+#tratamentos .card__index {
+  font-size: clamp(1.85rem, 1.4rem + 1vw, 2.35rem);
   color: var(--gold);
+  text-shadow: 0 1px 10px rgb(0 0 0 / 0.45);
 }
-.sol-card__veil h3 {
-  margin: 0.45rem 0 0;
-  font-size: clamp(1.45rem, 1.15rem + 1vw, 2rem);
-  color: var(--bone);
+#tratamentos .card__body h3 {
+  margin-top: 0.65rem;
+  font-size: clamp(1.25rem, 1.1rem + 0.55vw, 1.55rem);
   text-wrap: balance;
 }
-
-.sol-carousel__caption {
-  position: relative;
-  z-index: 2;
-  display: grid;
-  gap: 1.25rem;
-  justify-items: start;
-  max-inline-size: 40rem;
-  margin-inline: auto;
-  margin-block-start: 0.25rem;
-  text-align: start;
-  padding-inline: clamp(0.25rem, 2vw, 1rem);
+#tratamentos .card__body > p {
+  line-height: 1.65;
 }
-.sol-carousel__copy {
-  margin: 0;
-  color: var(--text-muted-dark);
-  font-size: clamp(1rem, 0.95rem + 0.25vw, 1.1rem);
-  line-height: 1.7;
-}
-.sol-carousel__caption .btn {
-  justify-self: start;
+#tratamentos .card__list {
+  margin-top: 1.25rem;
+  padding-top: 1.15rem;
+  border-top: 1px solid var(--edge-dark);
 }
 
-@media (max-width: 720px) {
-  .sol-carousel__stage {
-    --sol-w: min(22.5rem, 92vw);
-    --sol-h: min(28rem, calc(var(--sol-w) * 1.15));
-    block-size: calc(var(--sol-h) + 4.5rem);
-  }
-  .sol-carousel__caption {
-    text-align: center;
-    justify-items: center;
-  }
-  .sol-carousel__caption .btn {
-    justify-self: center;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .sol-card,
-  .sol-card__media img,
-  .sol-card__veil,
-  .sol-carousel__glow {
-    transition: none !important;
-    animation: none !important;
-  }
-  .sol-card.is-active .sol-card__media img {
-    scale: 1;
-  }
-}
-
-/* Legacy offer cards (subpages) */
+/* Subpage offer leftovers */
 .offer {
   display: flex;
   flex-direction: column;
@@ -913,7 +720,6 @@
   overflow: hidden;
   background: var(--surface-panel);
   border: 1px solid var(--edge-dark);
-  box-shadow: var(--shadow-panel);
 }
 .offer__media {
   position: relative;
