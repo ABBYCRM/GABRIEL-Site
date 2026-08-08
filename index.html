@@ -352,7 +352,7 @@
   <!-- ── Treatments ──────────────────────────────────────────────────────── -->
   <section class="section section--dark sol-section" id="tratamentos" aria-labelledby="treat-title">
     <div class="shell">
-      <div class="section-head section-head--center">
+      <div class="section-head">
         <span class="eyebrow">Soluções</span>
         <h2 id="treat-title">Três caminhos, um <em class="gradient-text">plano só seu</em>.</h2>
         <p class="lede">
@@ -362,78 +362,91 @@
       </div>
 
       <div class="sol-carousel" data-sol-carousel tabindex="0" aria-roledescription="carrossel" aria-label="Soluções de tratamento">
-        <p class="sol-carousel__watermark" aria-hidden="true">Soluções</p>
-
-        <div class="sol-carousel__row">
+        <div class="sol-carousel__controls">
           <button class="sol-carousel__arrow" type="button" data-sol-prev aria-label="Solução anterior">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
           </button>
-
-          <div class="sol-carousel__stage">
-            <article class="sol-card is-active" data-sol-card data-index="0"
-              data-title="Transplante capilar FUE"
-              data-role="Cirurgia"
-              data-copy="Extração de unidades foliculares uma a uma na área doadora occipital e implante na região rarefeita. Sem cicatriz linear, com desenho de linha frontal individualizado."
-              data-href="/transplante-capilar-fue/"
-              data-cta="Ver a técnica em detalhe">
-              <span class="sol-card__index" aria-hidden="true">01</span>
-              <picture>
-                <source type="image/avif" srcset="/assets/img/result-frontal-640.avif 640w, /assets/img/result-frontal-960.avif 960w" sizes="(max-width: 700px) 70vw, 18rem">
-                <source type="image/webp" srcset="/assets/img/result-frontal-640.webp 640w, /assets/img/result-frontal-960.webp 960w" sizes="(max-width: 700px) 70vw, 18rem">
-                <img src="/assets/img/result-frontal-640.jpg" width="960" height="540" alt="Linha frontal densa após transplante capilar pela técnica FUE" loading="lazy" decoding="async">
-              </picture>
-            </article>
-
-            <article class="sol-card" data-sol-card data-index="1"
-              data-title="MMP capilar"
-              data-role="Tratamento clínico"
-              data-copy="Microinfusão de medicamentos pelo próprio couro cabeludo. Indicada para queda ativa, afinamento difuso e para preservar o cabelo nativo antes ou depois da cirurgia."
-              data-href="/mmp-capilar/"
-              data-cta="Entender o protocolo">
-              <span class="sol-card__index" aria-hidden="true">02</span>
-              <picture>
-                <source type="image/avif" srcset="/assets/img/eval-feminina-560.avif 560w, /assets/img/eval-feminina-840.avif 840w" sizes="(max-width: 700px) 70vw, 18rem">
-                <source type="image/webp" srcset="/assets/img/eval-feminina-560.webp 560w, /assets/img/eval-feminina-840.webp 840w" sizes="(max-width: 700px) 70vw, 18rem">
-                <img src="/assets/img/eval-feminina-560.jpg" width="840" height="840" alt="Rarefação difusa do topo da cabeça em paciente feminina, avaliada para MMP capilar" loading="lazy" decoding="async">
-              </picture>
-            </article>
-
-            <article class="sol-card" data-sol-card data-index="2"
-              data-title="Avaliação individual"
-              data-role="Primeiro passo"
-              data-copy="Tricoscopia, classificação da calvície, medição da área doadora e simulação do desenho. Você sai da consulta sabendo quantas unidades foliculares precisa e o que esperar."
-              data-href="https://wa.me/5511940757575?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o%20de%20transplante%20capilar."
-              data-cta="Agendar avaliação"
-              data-external="true">
-              <span class="sol-card__index" aria-hidden="true">03</span>
-              <picture>
-                <source type="image/avif" srcset="/assets/img/dr-planning-560.avif 560w, /assets/img/dr-planning-840.avif 840w" sizes="(max-width: 700px) 70vw, 18rem">
-                <source type="image/webp" srcset="/assets/img/dr-planning-560.webp 560w, /assets/img/dr-planning-840.webp 840w" sizes="(max-width: 700px) 70vw, 18rem">
-                <img src="/assets/img/dr-planning-560.jpg" width="1120" height="1456" alt="Dr. Gabriel Galeb medindo a nova linha frontal de um paciente com paquímetro" loading="lazy" decoding="async">
-              </picture>
-            </article>
+          <div class="sol-carousel__dots" data-sol-dots role="tablist" aria-label="Ir para a solução">
+            <button type="button" aria-label="Solução 01" aria-current="true"></button>
+            <button type="button" aria-label="Solução 02"></button>
+            <button type="button" aria-label="Solução 03"></button>
           </div>
-
           <button class="sol-carousel__arrow" type="button" data-sol-next aria-label="Próxima solução">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
           </button>
         </div>
 
+        <div class="sol-carousel__stage">
+          <div class="sol-carousel__glow" aria-hidden="true"></div>
+
+          <article class="sol-card is-active" data-sol-card data-index="0"
+            data-title="Transplante capilar FUE"
+            data-role="Cirurgia"
+            data-copy="Extração de unidades foliculares uma a uma na área doadora occipital e implante na região rarefeita. Sem cicatriz linear, com desenho de linha frontal individualizado."
+            data-href="/transplante-capilar-fue/"
+            data-cta="Ver a técnica em detalhe">
+            <span class="sol-card__index" aria-hidden="true">01</span>
+            <div class="sol-card__media">
+              <picture>
+                <source type="image/avif" srcset="/assets/img/result-frontal-640.avif 640w, /assets/img/result-frontal-960.avif 960w" sizes="(max-width: 900px) 88vw, 36rem">
+                <source type="image/webp" srcset="/assets/img/result-frontal-640.webp 640w, /assets/img/result-frontal-960.webp 960w" sizes="(max-width: 900px) 88vw, 36rem">
+                <img src="/assets/img/result-frontal-640.jpg" width="960" height="540" alt="Linha frontal densa após transplante capilar pela técnica FUE" loading="lazy" decoding="async">
+              </picture>
+            </div>
+            <div class="sol-card__veil">
+              <span class="eyebrow">Cirurgia</span>
+              <h3>Transplante capilar FUE</h3>
+            </div>
+          </article>
+
+          <article class="sol-card" data-sol-card data-index="1"
+            data-title="MMP capilar"
+            data-role="Tratamento clínico"
+            data-copy="Microinfusão de medicamentos pelo próprio couro cabeludo. Indicada para queda ativa, afinamento difuso e para preservar o cabelo nativo antes ou depois da cirurgia."
+            data-href="/mmp-capilar/"
+            data-cta="Entender o protocolo">
+            <span class="sol-card__index" aria-hidden="true">02</span>
+            <div class="sol-card__media">
+              <picture>
+                <source type="image/avif" srcset="/assets/img/eval-feminina-560.avif 560w, /assets/img/eval-feminina-840.avif 840w" sizes="(max-width: 900px) 88vw, 36rem">
+                <source type="image/webp" srcset="/assets/img/eval-feminina-560.webp 560w, /assets/img/eval-feminina-840.webp 840w" sizes="(max-width: 900px) 88vw, 36rem">
+                <img src="/assets/img/eval-feminina-560.jpg" width="840" height="840" alt="Rarefação difusa do topo da cabeça em paciente feminina, avaliada para MMP capilar" loading="lazy" decoding="async">
+              </picture>
+            </div>
+            <div class="sol-card__veil">
+              <span class="eyebrow">Tratamento clínico</span>
+              <h3>MMP capilar</h3>
+            </div>
+          </article>
+
+          <article class="sol-card" data-sol-card data-index="2"
+            data-title="Avaliação individual"
+            data-role="Primeiro passo"
+            data-copy="Tricoscopia, classificação da calvície, medição da área doadora e simulação do desenho. Você sai da consulta sabendo quantas unidades foliculares precisa e o que esperar."
+            data-href="https://wa.me/5511940757575?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o%20de%20transplante%20capilar."
+            data-cta="Agendar avaliação"
+            data-external="true">
+            <span class="sol-card__index" aria-hidden="true">03</span>
+            <div class="sol-card__media">
+              <picture>
+                <source type="image/avif" srcset="/assets/img/dr-planning-560.avif 560w, /assets/img/dr-planning-840.avif 840w" sizes="(max-width: 900px) 88vw, 36rem">
+                <source type="image/webp" srcset="/assets/img/dr-planning-560.webp 560w, /assets/img/dr-planning-840.webp 840w" sizes="(max-width: 900px) 88vw, 36rem">
+                <img src="/assets/img/dr-planning-560.jpg" width="1120" height="1456" alt="Dr. Gabriel Galeb medindo a nova linha frontal de um paciente com paquímetro" loading="lazy" decoding="async">
+              </picture>
+            </div>
+            <div class="sol-card__veil">
+              <span class="eyebrow">Primeiro passo</span>
+              <h3>Avaliação individual</h3>
+            </div>
+          </article>
+        </div>
+
         <div class="sol-carousel__caption">
-          <h3 class="sol-carousel__name" data-sol-name>Transplante capilar FUE</h3>
-          <p class="sol-carousel__role" data-sol-role>Cirurgia</p>
           <p class="sol-carousel__copy" data-sol-copy>
             Extração de unidades foliculares uma a uma na área doadora occipital e implante na região
             rarefeita. Sem cicatriz linear, com desenho de linha frontal individualizado.
           </p>
-          <a class="textlink" data-sol-link href="/transplante-capilar-fue/">Ver a técnica em detalhe
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-        </div>
-
-        <div class="sol-carousel__dots" data-sol-dots role="tablist" aria-label="Ir para a solução">
-          <button type="button" aria-label="Solução 01" aria-current="true"></button>
-          <button type="button" aria-label="Solução 02"></button>
-          <button type="button" aria-label="Solução 03"></button>
+          <a class="btn btn--ghost" data-sol-link href="/transplante-capilar-fue/">Ver a técnica em detalhe</a>
         </div>
       </div>
     </div>
