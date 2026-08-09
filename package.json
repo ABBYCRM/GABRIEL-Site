@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build:luxe": "python3 scripts/luxe-patients.py",
     "build:images": "node scripts/build-images.mjs",
     "build:pages": "node scripts/build-pages.mjs",
     "build": "npm run build:images && npm run build:pages",

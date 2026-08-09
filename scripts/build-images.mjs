@@ -24,6 +24,12 @@ fs.rmSync(OUT, { recursive: true, force: true });
 fs.mkdirSync(OUT, { recursive: true });
 
 function src(name) {
+  // Prefer luxe-processed clinical frames (eye blur + studio backdrop).
+  const luxeDir = path.join(SRC, 'luxe');
+  if (fs.existsSync(luxeDir)) {
+    const luxeHit = fs.readdirSync(luxeDir).find((f) => path.parse(f).name === name);
+    if (luxeHit) return path.join(luxeDir, luxeHit);
+  }
   const hit = fs.readdirSync(SRC).find((f) => path.parse(f).name === name);
   if (!hit) throw new Error(`missing source: ${name}`);
   return path.join(SRC, hit);
@@ -50,15 +56,20 @@ async function emit(pipeline, base, widths) {
 }
 
 /**
- * Patient frames are cropped to the treated zone — scalp, hairline and upper
- * forehead — at a fixed 16:9. That drops the clinic's black privacy bar out of
- * frame entirely and, more importantly, makes every before/after pair share the
- * same framing so the comparison is honest rather than flattering.
- * Coordinates are in source pixels and were read off each original.
+ * Patient frames ship as pre-harmonized 16:9 luxe clinical plates when present
+ * (see scripts/luxe-patients.py). Fallback: crop the treated scalp band from the
+ * raw clinic originals so every before/after pair shares the same framing.
  */
 const SCALP_RATIO = 16 / 9;
-async function scalp(name, { left, top, width, height }) {
-  return sharp(src(name))
+async function scalp(name, crop) {
+  const file = src(name);
+  const meta = await sharp(file).metadata();
+  // Luxe plates are already 1440×810 — just tune tone.
+  if (meta.width === 1440 && meta.height === 810) {
+    return sharp(file).modulate({ saturation: 1.02 }).linear(1.02, -2);
+  }
+  const { left, top, width, height } = crop;
+  return sharp(file)
     .extract({ left, top, width, height })
     .resize(1440, Math.round(1440 / SCALP_RATIO), { fit: 'cover' })
     .modulate({ saturation: 1.04 })
@@ -94,16 +105,21 @@ img['case-03-depois'] = await emit(
 );
 
 console.log('Clinical documentation');
-img['eval-vertice'] = await emit(await scalp('eval-vertice', BAND), 'eval-vertice', [640, 960]);
-img['result-frontal'] = await emit(await scalp('result-frontal', BAND), 'result-frontal', [640, 960]);
-img['eval-feminina'] = await emit(
-  sharp(src('eval-feminina'))
-    .extract({ left: 300, top: 700, width: 2424, height: 2424 })
-    .modulate({ saturation: 1.03 })
-    .linear(1.03, -3),
-  'eval-feminina',
-  [560, 840],
-);
+img['eval-vertice'] = await emit(await scalp('eval-vertice', BAND), 'eval-vertice', [640, 960, 1440]);
+img['result-frontal'] = await emit(await scalp('result-frontal', BAND), 'result-frontal', [640, 960, 1440]);
+{
+  const file = src('eval-feminina');
+  const meta = await sharp(file).metadata();
+  const pipeline =
+    meta.width === 1440 && meta.height === 810
+      ? sharp(file).modulate({ saturation: 1.02 }).linear(1.02, -2)
+      : sharp(file)
+          .extract({ left: 300, top: 700, width: 2424, height: 2424 })
+          .resize(1440, 810, { fit: 'cover' })
+          .modulate({ saturation: 1.03 })
+          .linear(1.03, -3);
+  img['eval-feminina'] = await emit(pipeline, 'eval-feminina', [640, 960, 1440]);
+}
 
 console.log('Doctor portraits');
 img['dr-portrait'] = await emit(portrait('dr-portrait-cufflink@2x', 0.78), 'dr-portrait', [560, 760, 1120]);

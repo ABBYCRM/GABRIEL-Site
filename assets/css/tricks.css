@@ -254,7 +254,7 @@
   inline-size: 100%;
   block-size: 100%;
   object-fit: cover;
-  object-position: 50% 20%;
+  object-position: 50% 22%;
 }
 .compare__before {
   z-index: 1;
@@ -368,8 +368,9 @@
 }
 
 .coverflow__deck {
+  /* 16:9 clinical frames — height driven by media ratio, not a loose heuristic */
   --cover-w: min(28rem, 78vw);
-  --cover-h: calc(var(--cover-w) * 0.72);
+  --cover-h: calc(var(--cover-w) * 9 / 16);
   position: relative;
   inline-size: 100%;
   block-size: calc(var(--cover-h) + 5.5rem);
@@ -605,13 +606,19 @@
   display: block;
 }
 
-/* 024 / 071 — ensure media always reserves space */
+/* 024 / 071 — one clinical media box for cards + compare */
 .card__media,
-.compare {
-  aspect-ratio: 16 / 10;
-}
-.compare {
+.compare,
+.offer__media,
+.split__media {
   aspect-ratio: 16 / 9;
+}
+.card__media img,
+.offer__media img,
+.split__media img,
+.compare__layer img {
+  object-fit: cover;
+  object-position: 50% 22%;
 }
 
 /* 030 — hover lift only on fine pointers */
@@ -684,7 +691,7 @@
   border-color: var(--edge-gold);
 }
 #tratamentos .card__media {
-  aspect-ratio: 16 / 11;
+  aspect-ratio: 16 / 9;
 }
 #tratamentos .card__media::after {
   content: '';
@@ -724,12 +731,13 @@
 .offer__media {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 16 / 9;
 }
 .offer__media img {
   inline-size: 100%;
   block-size: 100%;
   object-fit: cover;
+  object-position: 50% 22%;
 }
 .offer__body {
   padding: 1.5rem;
