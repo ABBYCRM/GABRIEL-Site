@@ -3,9 +3,16 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "dependencies": {
+  "scripts": {
+    "images": "node scripts/process-images.mjs",
+    "test": "node e2e/smoke.mjs",
+    "test:e2e": "node e2e/smoke.mjs"
+  },
+  "devDependencies": {
     "playwright": "^1.60.0",
-    "postcss": "^8.5.25",
     "sharp": "^0.35.3"
+  },
+  "engines": {
+    "node": ">=20.9.0"
   }
 }

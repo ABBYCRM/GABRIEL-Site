@@ -1,11 +1,11 @@
 {
   "name": "Dr. Gabriel Galeb — Transplante Capilar São Paulo",
   "short_name": "Dr. Gabriel Galeb",
-  "description": "Cirurgião especialista em transplante capilar em São Paulo. Técnica FUE, MMP Capilar e avaliação personalizada.",
+  "description": "Médico cirurgião capilar em Alphaville, Barueri, na Grande São Paulo. Técnica FUE, MMP Capilar e avaliação personalizada.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#2b1a10",
-  "theme_color": "#2b1a10",
+  "background_color": "#0B0B0F",
+  "theme_color": "#0B0B0F",
   "lang": "pt-BR",
   "scope": "/",
   "icons": [
