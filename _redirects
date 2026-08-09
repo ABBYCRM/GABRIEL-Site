@@ -1,3 +1,2 @@
-# Render static site redirects (optional)
-/assets/* /assets/:splat 200
-/* /index.html 200
+# Keep the public home URL canonical.
+/index.html / 301

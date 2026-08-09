@@ -1,24 +1,38 @@
-# Dr. Gabriel Galeb — robots.txt
-# https://www.drgabrielgaleb.com.br/robots.txt
+# Clínica Dr. Gabriel Galeb — regras de rastreamento
+# Conteúdo público disponível para mecanismos de busca e assistentes de IA.
 
 User-agent: *
 Allow: /
-Disallow: /admin/
-Disallow: /private/
 
-# Explicitly allow major AI/LLM crawlers (modern best practice)
+# Busca do ChatGPT
+User-agent: OAI-SearchBot
+Allow: /
+
+# Rastreadores OpenAI
 User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Google e recursos de IA do Google
+User-agent: Googlebot
 Allow: /
 
 User-agent: Google-Extended
 Allow: /
 
+# Anthropic
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
 User-agent: anthropic-ai
 Allow: /
 
-User-agent: Claude-Web
-Allow: /
-
+# Outros mecanismos de resposta e pesquisa
 User-agent: PerplexityBot
 Allow: /
 
@@ -34,11 +48,4 @@ Allow: /
 User-agent: cohere-ai
 Allow: /
 
-User-agent: Bytespider
-Allow: /
-
-# Sitemap
 Sitemap: https://www.drgabrielgaleb.com.br/sitemap.xml
-
-# Crawl-delay (be nice to small Render free-tier)
-Crawl-delay: 1
