@@ -1,12 +1,19 @@
-# Dr. Gabriel Galeb — robots.txt
-# https://www.drgabrielgaleb.com.br/robots.txt
+# Dr. Gabriel Galeb — https://www.drgabrielgaleb.com.br
 
 User-agent: *
 Allow: /
 Disallow: /admin/
 Disallow: /private/
+Disallow: /*?*lightbox=
 
-# Explicitly allow major AI/LLM crawlers (modern best practice)
+# Major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# AI / LLM crawlers — explicit allow (modern best practice for medical YMYL)
 User-agent: GPTBot
 Allow: /
 
@@ -34,11 +41,17 @@ Allow: /
 User-agent: cohere-ai
 Allow: /
 
-User-agent: Bytespider
-Allow: /
+# Aggressive SEO crawlers
+User-agent: AhrefsBot
+Crawl-delay: 10
 
-# Sitemap
+User-agent: SemrushBot
+Crawl-delay: 10
+
+User-agent: DotBot
+Crawl-delay: 10
+
+User-agent: PetalBot
+Disallow: /
+
 Sitemap: https://www.drgabrielgaleb.com.br/sitemap.xml
-
-# Crawl-delay (be nice to small Render free-tier)
-Crawl-delay: 1

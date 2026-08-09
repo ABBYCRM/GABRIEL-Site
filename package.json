@@ -1,11 +1,18 @@
 {
-  "name": "gabriel-site-e2e",
-  "version": "1.0.0",
+  "name": "gabriel-galeb-site",
+  "version": "2.0.0",
   "private": true,
   "type": "module",
+  "scripts": {
+    "build:luxe": "python3 scripts/luxe-patients.py",
+    "build:images": "node scripts/build-images.mjs",
+    "build:pages": "node scripts/build-pages.mjs",
+    "build": "npm run build:images && npm run build:pages",
+    "test:e2e": "node e2e/smoke.mjs",
+    "serve": "python3 -m http.server 8899 --bind 127.0.0.1"
+  },
   "dependencies": {
     "playwright": "^1.60.0",
-    "postcss": "^8.5.25",
     "sharp": "^0.35.3"
   }
 }

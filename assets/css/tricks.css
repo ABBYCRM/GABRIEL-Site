@@ -1,0 +1,747 @@
+/* ==========================================================================
+   CSS pattern pack — adapted from the 120-trick collection to the Galeb
+   palette (midnight / champagne / bone). Neon cyan & purple intentionally
+   remapped to gold so the site stays luxe, not loud.
+   Patterns used: 001–009, 011–014, 021–030, 031–037, 041–049, 051, 057,
+   069–072, 075, 081–085, 090–098, 105, 111–116, 119 + carousel / compare.
+   ========================================================================== */
+
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@property --pos {
+  syntax: '<percentage>';
+  initial-value: 50%;
+  inherits: true;
+}
+
+/* 103 / 104 — declare color schemes; keep brand tokens authoritative */
+:root {
+  color-scheme: light dark;
+  accent-color: var(--gold);
+  --surface: var(--bone);
+  --text: var(--graphite);
+  scrollbar-gutter: stable;
+}
+
+/* 096 — reserve scrollbar space (above) */
+
+/* 090 — scroll-driven reading progress */
+.progress {
+  position: fixed;
+  inset: 0 auto auto 0;
+  z-index: 80;
+  inline-size: 100%;
+  block-size: 2px;
+  background: var(--gold);
+  transform-origin: left;
+  scale: 0 1;
+  pointer-events: none;
+}
+@supports (animation-timeline: scroll()) {
+  .progress {
+    animation: fill-bar linear;
+    animation-timeline: scroll(root block);
+  }
+}
+@keyframes fill-bar {
+  to {
+    scale: 1 1;
+  }
+}
+
+/* 001 — rotating conic-gradient glow, gold-only */
+.glow-frame {
+  position: relative;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--ink-2), var(--ink-2)) padding-box,
+    conic-gradient(
+        from var(--angle),
+        var(--gold-deep),
+        var(--gold-bright),
+        var(--gold),
+        transparent 40%,
+        transparent 60%,
+        var(--gold-deep)
+      )
+      border-box;
+  animation: spin-angle 8s linear infinite;
+}
+@keyframes spin-angle {
+  to {
+    --angle: 1turn;
+  }
+}
+
+/* 002 — static gold gradient border */
+.gold-border {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--ink-2), var(--ink-2)) padding-box,
+    linear-gradient(135deg, var(--gold-deep), var(--gold-bright), var(--gold-deep)) border-box;
+}
+
+/* 003 — restrained gold gradient text (static — no rainbow crawl) */
+.gradient-text {
+  color: transparent;
+  background: linear-gradient(120deg, var(--gold-deep), var(--gold-bright) 45%, var(--gold));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 004 — fancy-link is an alias; .textlink already owns the underline */
+.fancy-link {
+  text-decoration: none;
+}
+
+/* 006 / 007 — elevation + inset hairline */
+.elevated {
+  box-shadow:
+    0 1px 2px rgb(10 13 24 / 0.06),
+    0 12px 30px rgb(10 13 24 / 0.12);
+}
+.hairline-inset {
+  box-shadow: inset 0 0 0 1px var(--hairline-light);
+}
+
+/* 008 — masthead: reinforce blur only; keep gold edge from styles.css */
+.masthead {
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+}
+
+/* 009 — one shared atmosphere for all dark bands (no per-section fights) */
+.hero,
+.section--dark {
+  background-color: var(--ink);
+  background-image: radial-gradient(circle at 78% 10%, rgb(201 169 97 / 0.11), transparent 36%),
+    radial-gradient(circle at 12% 90%, rgb(66 84 140 / 0.1), transparent 42%);
+}
+
+/* 037 — tabular metrics */
+.stats b,
+.metric,
+.timer {
+  font-variant-numeric: tabular-nums;
+}
+
+/* 042 / 094 — scroll offset for in-page anchors */
+:is(section, [id]) {
+  scroll-margin-block-start: 6.5rem;
+}
+
+/* 046 already present; 069 selection already present */
+
+/* 049 — open details motion */
+.faq details[open] > summary {
+  color: var(--gold-deep);
+}
+.faq details[open] p {
+  animation: reveal-faq 0.25s var(--ease);
+}
+@keyframes reveal-faq {
+  from {
+    opacity: 0;
+    translate: 0 -0.25rem;
+  }
+}
+
+/* 041 — parent state via :has() */
+.faq details:has([open]),
+.faq details[open] {
+  background: color-mix(in oklab, var(--gold) 6%, transparent);
+}
+
+/* 075 — fade edge helper */
+.fade-bottom {
+  mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
+}
+
+/* 082 — stagger children */
+.stagger > * {
+  animation: enter-soft 0.55s var(--ease) both;
+  animation-delay: calc(var(--i, 0) * 90ms);
+}
+@keyframes enter-soft {
+  from {
+    opacity: 0;
+    translate: 0 0.85rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stagger > *,
+  .glow-frame,
+  .gradient-text,
+  .faq details[open] p {
+    animation: none !important;
+  }
+}
+
+/* 085 — individual transform props on interactive chips */
+.chip-lift {
+  translate: 0 0;
+  scale: 1;
+  transition: translate 0.25s var(--ease), scale 0.25s var(--ease);
+}
+@media (hover: hover) and (pointer: fine) {
+  .chip-lift:hover {
+    translate: 0 -0.15rem;
+    scale: 1.015;
+  }
+}
+
+/* 098 — safe areas on floating CTA */
+.fab {
+  inset-inline-end: max(1rem, env(safe-area-inset-right));
+  inset-block-end: max(1rem, env(safe-area-inset-bottom));
+}
+
+/* 115 — larger hit targets on coarse pointers */
+@media (pointer: coarse) {
+  .btn,
+  .burger,
+  .ba-carousel__btn,
+  .coverflow__controls button,
+  .compare__range {
+    min-block-size: 44px;
+  }
+}
+
+/* 116 — skip rendering far-off cards (not absolute 3D decks) */
+.card,
+.offer,
+.ba-slide,
+.quote {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 420px;
+}
+
+/* 023 — container queries for treatment cards */
+.cards {
+  container-type: inline-size;
+}
+@container (width >= 42rem) {
+  .card__body {
+    padding-block: 2rem;
+  }
+}
+
+/* 105 — brand hover lives on .btn tokens in styles.css (single source) */
+
+/* ==========================================================================
+   BEFORE / AFTER — interactive compare (clip-path + range)
+   ========================================================================== */
+.compare {
+  --pos: 50%;
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  aspect-ratio: 4 / 5;
+  background: var(--ink);
+  touch-action: pan-y;
+  user-select: none;
+}
+.compare__layer {
+  position: absolute;
+  inset: 0;
+}
+.compare__layer img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  object-position: 50% 22%;
+}
+.compare__before {
+  z-index: 1;
+  clip-path: inset(0 calc(100% - var(--pos)) 0 0);
+}
+.compare__after {
+  z-index: 0;
+}
+.compare__range {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  margin: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  appearance: none;
+  background: transparent;
+  cursor: ew-resize;
+}
+.compare__range::-webkit-slider-thumb {
+  appearance: none;
+  inline-size: 2px;
+  block-size: 100vh;
+  background: transparent;
+}
+.compare__range::-moz-range-thumb {
+  inline-size: 2px;
+  block-size: 100%;
+  border: 0;
+  background: transparent;
+}
+.compare__handle {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: var(--pos);
+  z-index: 3;
+  inline-size: 2px;
+  background: var(--gold);
+  transform: translateX(-50%);
+  pointer-events: none;
+  box-shadow: 0 0 0 1px rgb(10 13 24 / 0.35);
+}
+.compare__handle::before {
+  content: '';
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  translate: -50% -50%;
+  inline-size: 2.4rem;
+  block-size: 2.4rem;
+  border-radius: 999px;
+  background: var(--ink);
+  border: 1px solid var(--gold);
+  box-shadow: 0 8px 24px rgb(10 13 24 / 0.35);
+  background-image: linear-gradient(var(--gold), var(--gold)), linear-gradient(var(--gold), var(--gold));
+  background-position:
+    35% 50%,
+    65% 50%;
+  background-size:
+    1px 0.7rem,
+    1px 0.7rem;
+  background-repeat: no-repeat;
+}
+.compare__tag {
+  position: absolute;
+  z-index: 2;
+  inset-block-start: 0.85rem;
+  padding: 0.4em 0.9em;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  pointer-events: none;
+  backdrop-filter: blur(6px);
+}
+.compare__tag--before {
+  inset-inline-start: 0.85rem;
+  background: rgb(10 13 24 / 0.82);
+  border: 1px solid var(--hairline-dark);
+  color: var(--gold);
+}
+.compare__tag--after {
+  inset-inline-end: 0.85rem;
+  background: var(--gold);
+  border: 1px solid var(--gold);
+  color: var(--ink);
+}
+
+/* ==========================================================================
+   3D COVERFLOW — same panel language as .offer / .card
+   ========================================================================== */
+.coverflow-stage {
+  position: relative;
+  margin-inline: 0;
+  inline-size: 100%;
+  padding-block: 0.5rem 0.25rem;
+  background: transparent;
+  overflow: visible;
+}
+
+.coverflow {
+  position: relative;
+  z-index: 1;
+  max-inline-size: 72rem;
+  margin-inline: auto;
+  outline: none;
+}
+.coverflow:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 6px;
+}
+
+.coverflow__deck {
+  /* 4:5 portrait frames preserve the full face and original setting */
+  --cover-w: min(28rem, 78vw);
+  --cover-h: calc(var(--cover-w) * 5 / 4);
+  position: relative;
+  inline-size: 100%;
+  block-size: calc(var(--cover-h) + 5.5rem);
+  perspective: 1800px;
+  perspective-origin: 50% 45%;
+  transform-style: preserve-3d;
+}
+
+.coverflow__card {
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  inline-size: var(--cover-w);
+  transform-style: preserve-3d;
+  transform-origin: center center;
+  will-change: transform;
+  cursor: pointer;
+}
+.coverflow__card.is-hero {
+  cursor: default;
+  z-index: 20;
+}
+.coverflow__card:not(.is-hero) {
+  z-index: 1;
+}
+
+.coverflow__face {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto auto;
+  border-radius: var(--radius-panel);
+  overflow: hidden;
+  background: var(--surface-panel);
+  border: 1px solid var(--edge-dark);
+  box-shadow: var(--shadow-panel);
+  transition: border-color 0.45s var(--ease), box-shadow 0.45s var(--ease);
+}
+.coverflow__card.is-hero .coverflow__face {
+  border-color: var(--edge-gold);
+  box-shadow: var(--shadow-panel), var(--glow-gold);
+}
+.coverflow__card:not(.is-hero) .coverflow__face {
+  border-color: var(--edge-gold-soft);
+}
+
+.coverflow__index {
+  position: absolute;
+  z-index: 3;
+  inset-block-start: 0.75rem;
+  inset-inline-start: 0.85rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 1.4rem + 1.2vw, 2.4rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--gold-bright);
+  text-shadow: 0 2px 14px rgb(0 0 0 / 0.55);
+  pointer-events: none;
+}
+
+.coverflow__card .compare {
+  border: 0;
+  border-radius: 0;
+}
+.coverflow__card:not(.is-hero) .compare__range,
+.coverflow__card:not(.is-hero) .compare__handle,
+.coverflow__card:not(.is-hero) .compare__tag {
+  pointer-events: none;
+  opacity: 0.35;
+}
+.coverflow__card:not(.is-hero) .compare__range {
+  visibility: hidden;
+}
+
+.coverflow__meta {
+  padding: 1rem 1.15rem 1.15rem;
+  background: var(--surface-panel);
+  border-block-start: 1px solid var(--edge-dark);
+  color: var(--bone);
+}
+.coverflow__meta h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  color: var(--bone);
+}
+.coverflow__meta p {
+  margin: 0.35rem 0 0;
+  font-size: 0.88rem;
+  color: var(--text-muted-dark);
+}
+
+.coverflow__controls,
+.ba-carousel__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-block-start: 1.5rem;
+  position: relative;
+  z-index: 2;
+}
+.ba-carousel__btn,
+.coverflow__controls .ba-carousel__btn {
+  display: grid;
+  place-items: center;
+  inline-size: 2.75rem;
+  block-size: 2.75rem;
+  border: 1px solid var(--edge-gold);
+  border-radius: var(--radius);
+  color: var(--gold);
+  background: var(--surface-panel);
+  transition: background 0.3s var(--ease), color 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+.ba-carousel__btn:hover,
+.coverflow__controls .ba-carousel__btn:hover {
+  background: var(--gold);
+  color: var(--ink);
+  border-color: var(--gold);
+}
+.ba-carousel__btn svg {
+  inline-size: 1rem;
+  block-size: 1rem;
+}
+.ba-carousel__dots {
+  display: flex;
+  gap: 0.55rem;
+  align-items: center;
+}
+.ba-carousel__dots a,
+.ba-carousel__dots button {
+  inline-size: 0.55rem;
+  block-size: 0.55rem;
+  padding: 0;
+  border-radius: var(--radius-pill);
+  background: rgb(250 247 241 / 0.28);
+  border: 1px solid transparent;
+  transition: inline-size 0.3s var(--ease), background 0.3s var(--ease);
+  cursor: pointer;
+}
+.ba-carousel__dots a[aria-current='true'],
+.ba-carousel__dots a:hover,
+.ba-carousel__dots button[aria-current='true'],
+.ba-carousel__dots button:hover {
+  inline-size: 1.4rem;
+  background: var(--gold);
+}
+
+.coverflow__hint {
+  text-align: center;
+  margin: 1rem 0 0;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  color: var(--text-muted-dark);
+  position: relative;
+  z-index: 2;
+}
+
+.coverflow-stage + .disclaimer {
+  margin-block-start: 2rem;
+}
+
+@media (max-width: 640px) {
+  .coverflow__deck {
+    --cover-w: min(20.5rem, 86vw);
+    block-size: calc(var(--cover-h) + 6.25rem);
+  }
+  .coverflow__meta h3 {
+    font-size: 1.05rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .coverflow__deck {
+    perspective: none;
+  }
+  .coverflow__card {
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .coverflow__card:not(.is-hero) {
+    opacity: 0.22;
+  }
+}
+
+/* Legacy scroll-snap slides (kept for any residual markup) */
+.ba-carousel {
+  position: relative;
+  container-type: inline-size;
+}
+.ba-carousel__rail {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold-deep) transparent;
+  padding-block-end: 0.5rem;
+  outline: none;
+}
+.ba-slide {
+  --i: 0;
+  flex: 0 0 min(100%, 52rem);
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+  min-inline-size: 0;
+  border: 1px solid var(--hairline-light);
+  background: var(--bone);
+  display: grid;
+  grid-template-rows: auto auto;
+}
+.ba-slide__info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 2rem;
+  padding: 1.4rem clamp(1.1rem, 0.6rem + 1.4vw, 1.9rem);
+}
+.section--dark .ba-slide {
+  background: var(--ink-2);
+  border-color: rgb(255 255 255 / 0.08);
+}
+.section--dark .ba-carousel__btn {
+  background: var(--ink);
+  border-color: var(--hairline-dark);
+  color: var(--gold);
+}
+
+/* Portrait gets the rotating gold frame */
+.portrait__frame.glow-frame {
+  padding: 0.6rem;
+}
+.portrait__frame.glow-frame img {
+  display: block;
+}
+
+/* 024 / 071 — one clinical media box for cards + compare */
+.card__media,
+.compare,
+.offer__media,
+.split__media {
+  aspect-ratio: 4 / 5;
+}
+.card__media img,
+.offer__media img,
+.split__media img,
+.compare__layer img {
+  object-fit: cover;
+  object-position: 50% 22%;
+}
+
+/* 030 — hover lift only on fine pointers */
+@media (hover: hover) and (pointer: fine) {
+  .card:hover,
+  .ba-slide:hover {
+    border-color: color-mix(in oklab, var(--gold) 40%, transparent);
+  }
+}
+
+/* 048 — highlight the URL target case */
+.ba-slide:target,
+.coverflow__card:target .coverflow__face {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+}
+
+/* Lightbox backdrop already present — strengthen (070) */
+.lightbox::backdrop {
+  background: rgb(4 6 12 / 0.92);
+  backdrop-filter: blur(6px);
+}
+
+/* 111 — sr-only utility */
+.sr-only {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Legacy stacked cases — wrap carousel / coverflow gracefully */
+.cases:has(.ba-carousel),
+.cases:has(.coverflow-stage) {
+  display: block;
+}
+
+/* ==========================================================================
+   SOLUÇÕES — clinical three-path panels (same language as site cards)
+   Quiet, equal weight, no carousel theatrics — appropriate for a physician.
+   ========================================================================== */
+#tratamentos .section-head h2 {
+  text-wrap: balance;
+}
+#tratamentos .cards.paths {
+  grid-template-columns: 1fr;
+  gap: clamp(1.25rem, 0.75rem + 1.5vw, 1.75rem);
+}
+@media (min-width: 900px) {
+  #tratamentos .cards.paths {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: stretch;
+  }
+}
+
+/* Restrained clinical hover: gold edge only — no bloom / lift carnival */
+#tratamentos .card {
+  box-shadow: none;
+  background: var(--surface-panel);
+  border-color: var(--edge-dark);
+}
+#tratamentos .card:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: var(--edge-gold);
+}
+#tratamentos .card__media {
+  aspect-ratio: 4 / 5;
+}
+#tratamentos .card__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 55%, rgb(10 13 24 / 0.35));
+  pointer-events: none;
+}
+#tratamentos .card__index {
+  font-size: clamp(1.85rem, 1.4rem + 1vw, 2.35rem);
+  color: var(--gold);
+  text-shadow: 0 1px 10px rgb(0 0 0 / 0.45);
+}
+#tratamentos .card__body h3 {
+  margin-top: 0.65rem;
+  font-size: clamp(1.25rem, 1.1rem + 0.55vw, 1.55rem);
+  text-wrap: balance;
+}
+#tratamentos .card__body > p {
+  line-height: 1.65;
+}
+#tratamentos .card__list {
+  margin-top: 1.25rem;
+  padding-top: 1.15rem;
+  border-top: 1px solid var(--edge-dark);
+}
+
+/* Subpage offer leftovers */
+.offer {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-panel);
+  overflow: hidden;
+  background: var(--surface-panel);
+  border: 1px solid var(--edge-dark);
+}
+.offer__media {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+}
+.offer__media img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  object-position: 50% 22%;
+}
+.offer__body {
+  padding: 1.5rem;
+}
+.offer__body h3 {
+  color: var(--bone);
+}
