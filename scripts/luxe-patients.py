@@ -30,7 +30,7 @@ OUT_W, OUT_H = 1440, 810  # 16:9 clinical media box
 
 
 def luxe_background(w: int, h: int) -> Image.Image:
-    """Luxe clinical interior — bone plaster, walnut cabinetry, champagne cove light."""
+    """Luxe clinical interior — bone plaster, frosted glass and champagne light."""
     y = np.linspace(0, 1, h, dtype=np.float32)[:, None]
     x = np.linspace(0, 1, w, dtype=np.float32)[None, :]
     rng = np.random.default_rng(11)
@@ -46,25 +46,18 @@ def luxe_background(w: int, h: int) -> Image.Image:
     g = g + 5 * (vein - 0.5)
     b = b + 4 * (vein - 0.5)
 
-    # Walnut cabinetry block (lower half, clearly readable even when soft)
-    cabinet = np.clip((y - 0.52) / 0.12, 0, 1)
-    grain = 0.85 + 0.15 * np.sin((x * 40 + y * 3) * math.pi)
-    wr, wg, wb = 118 * grain, 96 * grain, 74 * grain
-    r = r * (1 - 0.72 * cabinet) + wr * 0.72 * cabinet
-    g = g * (1 - 0.72 * cabinet) + wg * 0.72 * cabinet
-    b = b * (1 - 0.72 * cabinet) + wb * 0.72 * cabinet
+    # Smooth frosted-glass lower wall — no vertical pattern that could be
+    # mistaken for an oversized privacy blur.
+    glass = np.clip((y - 0.56) / 0.16, 0, 1)
+    r = r * (1 - 0.3 * glass) + 205 * 0.3 * glass
+    g = g * (1 - 0.3 * glass) + 208 * 0.3 * glass
+    b = b * (1 - 0.3 * glass) + 210 * 0.3 * glass
 
-    # Champagne cove / reveal at cabinet transition
-    reveal = np.exp(-((y - 0.52) ** 2) / 0.00055)
+    # Champagne cove / reveal at glass transition
+    reveal = np.exp(-((y - 0.56) ** 2) / 0.00055)
     r = np.clip(r + 90 * reveal, 0, 255)
     g = np.clip(g + 68 * reveal, 0, 255)
     b = np.clip(b + 28 * reveal, 0, 255)
-
-    # Soft panel seams on cabinetry
-    seams = (np.abs(np.sin(x * math.pi * 3)) ** 40) * cabinet * 18
-    r = np.clip(r - seams, 0, 255)
-    g = np.clip(g - seams * 0.9, 0, 255)
-    b = np.clip(b - seams * 0.8, 0, 255)
 
     # Recessed ceiling wash
     wash = np.exp(-((x - 0.78) ** 2) / 0.28 - ((y - 0.1) ** 2) / 0.16)
@@ -165,13 +158,53 @@ def _blur_rect(out: np.ndarray, x0: int, y0: int, x1: int, y1: int) -> None:
     out[y0:y1, x0:x1] = cv2.GaussianBlur(cv2.GaussianBlur(roi, (k, k), 0), (k, k), 0)
 
 
-def blur_eyes_haar(bgr: np.ndarray, had_black_bar: bool) -> np.ndarray:
-    """Blur eye regions — Haar when possible; narrow fallback only if needed."""
+def replace_black_bar(
+    bgr: np.ndarray, bar: tuple[int, int]
+) -> tuple[np.ndarray, tuple[int, int]]:
+    """Collapse an oversized legacy censor bar to a true eye-height band.
+
+    Pixels hidden by the source's large black rectangle do not exist and cannot
+    honestly be recovered. Removing that dead band and joining forehead to the
+    visible lower face preserves the real photograph; a narrow stripe marks the
+    privacy seam without inventing eyes.
+    """
+    y0, y1 = bar
+    h, w = bgr.shape[:2]
+    stripe_h = max(30, int(h * 0.045))
+    upper = bgr[max(0, y0 - 4) : y0].mean(axis=0)
+    lower = bgr[y1 : min(h, y1 + 4)].mean(axis=0)
+    bridge = np.empty((stripe_h, w, 3), np.uint8)
+    for i in range(stripe_h):
+        t = (i + 1) / (stripe_h + 1)
+        bridge[i] = upper * (1 - t) + lower * t
+    bridge = cv2.GaussianBlur(bridge, (81, 21), 0)
+    out = np.concatenate([bgr[:y0], bridge, bgr[y1:]], axis=0)
+    return out, (y0, y0 + stripe_h)
+
+
+def _privacy_stripe(out: np.ndarray, center_y: int) -> np.ndarray:
+    """Apply one precise horizontal frosted stripe over the eye line."""
+    result = out.copy()
+    h, w = result.shape[:2]
+    stripe_h = max(22, int(h * 0.045))
+    y0 = max(0, center_y - stripe_h // 2)
+    y1 = min(h, y0 + stripe_h)
+    roi = result[y0:y1]
+    if roi.size == 0:
+        return result
+    k = max(25, (stripe_h // 2) * 2 + 1)
+    blurred = cv2.GaussianBlur(roi, (k, k), 0)
+    # Navy tint keeps the privacy treatment deliberate and consistent.
+    tint = np.empty_like(blurred)
+    tint[:] = (24, 18, 12)  # BGR equivalent of midnight navy
+    result[y0:y1] = cv2.addWeighted(blurred, 0.58, tint, 0.42, 0)
+    return result
+
+
+def blur_eyes_haar(bgr: np.ndarray) -> np.ndarray:
+    """Detect eyes and cover them with one narrow horizontal privacy stripe."""
     out = bgr.copy()
     h, w = out.shape[:2]
-    if had_black_bar:
-        # Black bar already converted to a privacy blur — don't stack a second band.
-        return out
     cascade_path = Path(cv2.data.haarcascades) / "haarcascade_eye.xml"
     face_path = Path(cv2.data.haarcascades) / "haarcascade_frontalface_default.xml"
     gray = cv2.cvtColor(out, cv2.COLOR_BGR2GRAY)
@@ -190,31 +223,17 @@ def blur_eyes_haar(bgr: np.ndarray, had_black_bar: bool) -> np.ndarray:
         for ex, ey, ew, eh in eye_clf.detectMultiScale(gray, 1.08, 6, minSize=(20, 20)):
             if 0.15 * h < ey < 0.65 * h:
                 eyes.append((ex, ey, ew, eh))
-    for ex, ey, ew, eh in eyes:
-        pad_x, pad_y = int(ew * 0.45), int(eh * 0.55)
-        _blur_rect(
-            out,
-            max(0, ex - pad_x),
-            max(0, ey - pad_y),
-            min(w, ex + ew + pad_x),
-            min(h, ey + eh + pad_y),
-        )
-    # Narrow fallback for downturned top-down clinical frames (eyes near bottom).
-    if not eyes:
-        y0, y1 = int(h * 0.72), int(h * 0.9)
-        hsv = cv2.cvtColor(out, cv2.COLOR_BGR2HSV)
-        skin = cv2.inRange(hsv, (0, 25, 70), (30, 170, 255))
-        skin = cv2.bitwise_or(skin, cv2.inRange(hsv, (145, 25, 70), (180, 170, 255)))
-        band = skin[y0:y1]
-        if band.size and (band > 0).mean() > 0.06:
-            xs = np.where(band.max(axis=0) > 0)[0]
-            if len(xs) and (xs[-1] - xs[0]) < w * 0.75:
-                x0, x1 = max(0, xs[0] - 12), min(w, xs[-1] + 12)
-                _blur_rect(out, x0, y0, x1, y1)
+    if eyes:
+        centers = [ey + eh // 2 for _, ey, _, eh in eyes]
+        return _privacy_stripe(out, int(np.median(centers)))
+    # No fallback stripe: scalp-only views contain no identifiable eyes and
+    # must not receive a decorative band across the hair.
     return out
 
 
-def trim_alpha(subject: Image.Image, pad: float = 0.04) -> Image.Image:
+def trim_alpha(
+    subject: Image.Image, pad: float = 0.04, bridge_subject: bool = False
+) -> tuple[Image.Image, tuple[int, int, int, int]]:
     """Keep the largest opaque island, crop bounds, feather the matte."""
     arr = np.asarray(subject).copy()
     alpha = arr[..., 3]
@@ -223,27 +242,27 @@ def trim_alpha(subject: Image.Image, pad: float = 0.04) -> Image.Image:
     n, labels, stats, _ = cv2.connectedComponentsWithStats(mask, connectivity=8)
     if n > 1:
         areas = stats[1:, cv2.CC_STAT_AREA]
-        keep = 1 + int(np.argmax(areas))
-        arr[labels != keep, 3] = 0
+        largest = int(areas.max())
+        keep_labels = [
+            i
+            for i in range(1, n)
+            if stats[i, cv2.CC_STAT_AREA] >= largest * (0.05 if bridge_subject else 0.5)
+        ]
+        keep_mask = np.isin(labels, keep_labels).astype(np.uint8)
+        if bridge_subject and len(keep_labels) > 1:
+            # Legacy censor bars can split a face/head from beard and torso in
+            # rembg's matte. Reconnect only the major centered subject islands.
+            points = np.column_stack(np.where(keep_mask > 0)[::-1]).astype(np.int32)
+            hull = cv2.convexHull(points)
+            connected = np.zeros_like(keep_mask)
+            cv2.fillConvexPoly(connected, hull, 1)
+            keep_mask = connected
+            arr[..., 3] = np.maximum(arr[..., 3], keep_mask * 255)
+        arr[keep_mask == 0, 3] = 0
         alpha = arr[..., 3]
     ys, xs = np.where(alpha > 24)
     if len(xs) == 0:
-        return subject
-    x0, x1 = int(xs.min()), int(xs.max())
-    y0, y1 = int(ys.min()), int(ys.max())
-    # Soft elliptical guard — kills shelves/radiators glued to the matte
-    bw, bh = max(1, x1 - x0), max(1, y1 - y0)
-    cx, cy = x0 + bw / 2, y0 + bh * 0.42
-    yy, xx = np.ogrid[y0 : y1 + 1, x0 : x1 + 1]
-    ell = ((xx - cx) / (bw * 0.48)) ** 2 + ((yy - cy) / (bh * 0.58)) ** 2
-    local = arr[y0 : y1 + 1, x0 : x1 + 1]
-    fade = np.clip(1.15 - ell, 0, 1)
-    local[..., 3] = (local[..., 3].astype(np.float32) * fade).astype(np.uint8)
-    arr[y0 : y1 + 1, x0 : x1 + 1] = local
-    alpha = arr[..., 3]
-    ys, xs = np.where(alpha > 24)
-    if len(xs) == 0:
-        return subject
+        return subject, (0, 0, subject.width, subject.height)
     x0, x1 = xs.min(), xs.max()
     y0, y1 = ys.min(), ys.max()
     pw, ph = int((x1 - x0) * pad), int((y1 - y0) * pad)
@@ -253,14 +272,31 @@ def trim_alpha(subject: Image.Image, pad: float = 0.04) -> Image.Image:
     a = crop[..., 3].astype(np.float32)
     a = cv2.GaussianBlur(a, (0, 0), 1.2)
     crop[..., 3] = np.clip(a, 0, 255).astype(np.uint8)
-    return Image.fromarray(crop, "RGBA")
+    return Image.fromarray(crop, "RGBA"), (int(x0), int(y0), int(x1 + 1), int(y1 + 1))
 
 
-def subject_rgba(bgr: np.ndarray) -> Image.Image:
+def subject_rgba(
+    bgr: np.ndarray, bridge_subject: bool = False
+) -> tuple[Image.Image, tuple[int, int, int, int]]:
     rgb = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
-    pil = Image.fromarray(rgb)
-    cut = remove(pil).convert("RGBA")
-    return trim_alpha(cut)
+    if bridge_subject:
+        # Portrait fallback: legacy black censor bars can split rembg's mask
+        # between hair and beard. GrabCut keeps the complete head and face.
+        mask = np.zeros(bgr.shape[:2], np.uint8)
+        bg_model = np.zeros((1, 65), np.float64)
+        fg_model = np.zeros((1, 65), np.float64)
+        h, w = bgr.shape[:2]
+        rect = (int(w * 0.06), int(h * 0.01), int(w * 0.88), int(h * 0.98))
+        cv2.grabCut(bgr, mask, rect, bg_model, fg_model, 7, cv2.GC_INIT_WITH_RECT)
+        alpha = np.where((mask == cv2.GC_FGD) | (mask == cv2.GC_PR_FGD), 255, 0).astype(
+            np.uint8
+        )
+        alpha = cv2.morphologyEx(alpha, cv2.MORPH_CLOSE, np.ones((13, 13), np.uint8))
+        alpha = cv2.GaussianBlur(alpha, (0, 0), 1.8)
+        cut = Image.fromarray(np.dstack([rgb, alpha]), "RGBA")
+    else:
+        cut = remove(Image.fromarray(rgb)).convert("RGBA")
+    return trim_alpha(cut, bridge_subject=bridge_subject)
 
 
 def composite_clinical(subject: Image.Image, focus: str = "scalp") -> Image.Image:
@@ -290,20 +326,14 @@ def composite_clinical(subject: Image.Image, focus: str = "scalp") -> Image.Imag
     return bg.convert("RGB")
 
 
-def privacy_on_rgba(rgba: Image.Image, bar_frac: tuple[float, float] | None) -> Image.Image:
-    """Apply soft eye privacy on the cutout (after rembg), not before."""
+def privacy_on_rgba(rgba: Image.Image, stripe_y: int | None) -> Image.Image:
+    """Apply a narrow eye stripe on the cutout while preserving the full face."""
     arr = np.asarray(rgba).copy()
-    h, w = arr.shape[:2]
     bgr = cv2.cvtColor(arr[..., :3], cv2.COLOR_RGB2BGR)
-    if bar_frac:
-        y0 = int(h * bar_frac[0])
-        y1 = int(h * bar_frac[1])
-        pad = max(8, (y1 - y0) // 3)
-        y0, y1 = max(0, y0 - pad), min(h, y1 + pad)
-        # Soft privacy blur only — avoid inpaint (it invents stripe artifacts).
-        _blur_rect(bgr, 0, y0, w, y1)
+    if stripe_y is not None:
+        bgr = _privacy_stripe(bgr, stripe_y)
     else:
-        bgr = blur_eyes_haar(bgr, had_black_bar=False)
+        bgr = blur_eyes_haar(bgr)
     rgb = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
     arr[..., :3] = rgb
     return Image.fromarray(arr, "RGBA")
@@ -315,11 +345,11 @@ def process_file(path: Path, out_name: str, focus: str = "scalp") -> Path:
     if bgr is None:
         raise RuntimeError(f"cannot read {path}")
     h, w = bgr.shape[:2]
-    # Portraits: head+shoulders only — keeps shelves / desks out of rembg.
+    # Portraits: retain the full face and shoulders; only trim edge clutter.
     if focus == "portrait" and h > w:
         top = int(h * 0.0)
-        bottom = int(h * 0.58)
-        side = int(w * 0.06)
+        bottom = int(h * 0.96)
+        side = int(w * 0.025)
         bgr = bgr[top:bottom, side : w - side]
         h, w = bgr.shape[:2]
     elif focus == "scalp" and h >= w:
@@ -334,10 +364,12 @@ def process_file(path: Path, out_name: str, focus: str = "scalp") -> Path:
         h, w = bgr.shape[:2]
     gray = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
     bar = find_black_bar(gray)
-    bar_frac = (bar[0] / h, bar[1] / h) if bar else None
-    # Cut out FIRST on the original (black bar intact), then privacy-blur.
-    subject = subject_rgba(bgr)
-    subject = privacy_on_rgba(subject, bar_frac)
+    if bar:
+        bgr, bar = replace_black_bar(bgr, bar)
+    bar_center = (bar[0] + bar[1]) // 2 if bar else None
+    subject, crop = subject_rgba(bgr, bridge_subject=focus == "portrait")
+    stripe_y = bar_center - crop[1] if bar_center is not None else None
+    subject = privacy_on_rgba(subject, stripe_y)
     final = composite_clinical(subject, focus=focus)
     out = LUXE / f"{out_name}.png"
     final.save(out, optimize=True)

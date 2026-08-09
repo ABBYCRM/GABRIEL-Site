@@ -653,6 +653,13 @@ strong {
   object-position: 50% 18%;
   filter: contrast(1.02) saturate(0.98);
 }
+.portrait__frame picture,
+.split__media picture,
+.card__media picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
 .portrait__plate {
   position: absolute;
   left: 50%;
@@ -788,6 +795,14 @@ strong {
   object-position: 50% 22%;
   display: block;
 }
+.split__media--doctor {
+  width: min(100%, 34rem);
+  aspect-ratio: 4 / 5;
+  justify-self: center;
+}
+.split__media--doctor img {
+  object-position: 50% 20%;
+}
 .split__media::after {
   content: '';
   position: absolute;
@@ -860,6 +875,12 @@ strong {
   object-fit: cover;
   object-position: 50% 22%;
   transition: transform 0.9s var(--ease);
+}
+.card--doctor .card__media {
+  aspect-ratio: 4 / 5;
+}
+.card--doctor .card__media img {
+  object-position: 50% 18%;
 }
 .card:hover .card__media img {
   transform: scale(1.04);

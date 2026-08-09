@@ -368,7 +368,7 @@ pages.push({
   <section class="section">
     <div class="shell">
       <div class="split">
-        <div class="split__media">
+        <div class="split__media split__media--doctor">
           ${picture('dr-portrait', [560, 760, 1120], '(max-width:1080px) 32rem, 36vw', 'Dr. Gabriel Galeb, médico cirurgião especialista em transplante capilar', { w: 1120, h: 1456, loading: 'eager' })}
         </div>
         <div class="split__body prose">
@@ -424,7 +424,7 @@ pages.push({
           </ul>
           <p><a class="textlink" href="/transplante-capilar-fue/">Ver a técnica FUE em detalhe ${ICONS.arrow}</a></p>
         </div>
-        <div class="split__media">
+        <div class="split__media split__media--doctor">
           ${picture('dr-planning', [560, 840, 1120], '(max-width:1080px) 32rem, 36vw', 'Dr. Gabriel Galeb medindo a linha frontal de um paciente com paquímetro durante o planejamento cirúrgico', { w: 1120, h: 1456 })}
         </div>
       </div>
@@ -987,7 +987,7 @@ pages.push({
             <p>Documentação da rarefação no topo — ponto de partida do planejamento de densidade.</p>
           </div>
         </article>
-        <article class="card" style="background:var(--ink-2)">
+        <article class="card card--doctor" style="background:var(--ink-2)">
           <div class="card__media">
             ${picture('dr-planning', [560, 840], '(max-width:780px) 92vw, 30vw', 'Planejamento da linha frontal com paquímetro', { w: 840, h: 1092 })}
           </div>
