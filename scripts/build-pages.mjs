@@ -253,10 +253,10 @@ function coverflowCard({ id, i, pos, before, after, title, subtitle, loading = '
                 <span class="coverflow__index" aria-hidden="true">${num}</span>
                 <div class="compare" style="--pos: ${pos}%" data-compare>
                   <div class="compare__layer compare__after">
-                    ${picture(after.base, widths, sizes, after.alt, { w: 960, h: 540, loading })}
+                    ${picture(after.base, widths, sizes, after.alt, { w: 960, h: 1200, loading })}
                   </div>
                   <div class="compare__layer compare__before">
-                    ${picture(before.base, widths, sizes, before.alt, { w: 960, h: 540, loading })}
+                    ${picture(before.base, widths, sizes, before.alt, { w: 960, h: 1200, loading })}
                   </div>
                   <span class="compare__tag compare__tag--before">Antes</span>
                   <span class="compare__tag compare__tag--after">Depois</span>
@@ -549,7 +549,7 @@ pages.push({
     <div class="shell">
       <div class="split">
         <div class="split__media">
-          ${picture('result-frontal', [640, 960, 1440], '(max-width:1080px) 100vw, 42vw', 'Linha frontal reconstruída por transplante capilar FUE', { w: 960, h: 540, loading: 'eager' })}
+          ${picture('result-frontal', [640, 960, 1440], '(max-width:1080px) 100vw, 42vw', 'Linha frontal reconstruída por transplante capilar FUE', { w: 960, h: 1200, loading: 'eager' })}
         </div>
         <div class="split__body prose">
           <span class="eyebrow">O que é</span>
@@ -596,7 +596,7 @@ pages.push({
           </div>
         </div>
         <div class="split__media">
-          ${picture('case-01-depois', [640, 960, 1440], '(max-width:1080px) 100vw, 42vw', 'Resultado de reconstrução da linha frontal por FUE', { w: 960, h: 540 })}
+          ${picture('case-01-depois', [640, 960, 1440], '(max-width:1080px) 100vw, 42vw', 'Resultado de reconstrução da linha frontal por FUE', { w: 960, h: 1200 })}
         </div>
       </div>
     </div>
@@ -751,7 +751,7 @@ pages.push({
     <div class="shell">
       <div class="split">
         <div class="split__media">
-          ${picture('eval-feminina', [640, 960, 1440], '(max-width:1080px) 100vw, 38vw', 'Rarefação difusa do topo da cabeça, indicação clássica de avaliação para MMP capilar', { w: 960, h: 540, loading: 'eager' })}
+          ${picture('eval-feminina', [640, 960, 1440], '(max-width:1080px) 100vw, 38vw', 'Rarefação difusa do topo da cabeça, indicação clássica de avaliação para MMP capilar', { w: 960, h: 1200, loading: 'eager' })}
         </div>
         <div class="split__body prose">
           <span class="eyebrow">O protocolo</span>
@@ -795,7 +795,7 @@ pages.push({
           <p><a class="textlink" href="/resultados/">Ver caso de densificação feminina ${ICONS.arrow}</a></p>
         </div>
         <div class="split__media">
-          ${picture('case-03-antes', [640, 960, 1440], '(max-width:1080px) 100vw, 42vw', 'Rarefação central e risca alargada em paciente feminina antes do tratamento', { w: 960, h: 540 })}
+          ${picture('case-03-antes', [640, 960, 1440], '(max-width:1080px) 100vw, 42vw', 'Rarefação central e risca alargada em paciente feminina antes do tratamento', { w: 960, h: 1200 })}
         </div>
       </div>
     </div>
@@ -980,7 +980,7 @@ pages.push({
       <div class="cards" style="grid-template-columns:repeat(auto-fit,minmax(16rem,1fr))">
         <article class="card" style="background:var(--ink-2)">
           <div class="card__media">
-            ${picture('eval-vertice', [640, 960, 1440], '(max-width:780px) 92vw, 30vw', 'Avaliação do vértice: rarefação no topo da cabeça documentada na consulta', { w: 960, h: 540 })}
+            ${picture('eval-vertice', [640, 960, 1440], '(max-width:780px) 92vw, 30vw', 'Avaliação do vértice: rarefação no topo da cabeça documentada na consulta', { w: 960, h: 1200 })}
           </div>
           <div class="card__body">
             <h3 style="font-size:1.25rem">Avaliação do vértice</h3>
@@ -998,7 +998,7 @@ pages.push({
         </article>
         <article class="card" style="background:var(--ink-2)">
           <div class="card__media">
-            ${picture('result-frontal', [640, 960, 1440], '(max-width:780px) 92vw, 30vw', 'Linha frontal densa após maturação do transplante', { w: 960, h: 540 })}
+            ${picture('result-frontal', [640, 960, 1440], '(max-width:780px) 92vw, 30vw', 'Linha frontal densa após maturação do transplante', { w: 960, h: 1200 })}
           </div>
           <div class="card__body">
             <h3 style="font-size:1.25rem">Linha frontal madura</h3>

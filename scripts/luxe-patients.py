@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """
 Process patient photos for the clinic site:
-  1) Soften solid black privacy bars into a professional eye blur
-  2) Blur detected eyes when visible
-  3) Remove the original background (rembg)
-  4) Composite onto a luxe clinical backdrop
-  5) Emit centered 16:9 frames for the site pipeline
+  1) Preserve the complete original photograph and original background
+  2) Collapse oversized legacy censor blocks to a thin eye-level stripe
+  3) Blur detected eyes when an existing block is not present
+  4) Emit centered 4:5 portrait frames so the full face remains visible
 
 Reads labeled files from assets/src/patients/ when present (M1B, M1A, …),
 otherwise processes the canonical case-* / eval-* sources.
@@ -17,8 +16,7 @@ from pathlib import Path
 
 import cv2
 import numpy as np
-from PIL import Image
-from rembg import remove
+from PIL import Image, ImageOps
 
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "assets" / "src"
@@ -26,7 +24,7 @@ PATIENTS = SRC / "patients"
 LUXE = SRC / "luxe"
 LUXE.mkdir(parents=True, exist_ok=True)
 
-OUT_W, OUT_H = 1440, 810  # 16:9 clinical media box
+OUT_W, OUT_H = 1080, 1350  # 4:5 portrait clinical media box
 
 
 def luxe_background(w: int, h: int) -> Image.Image:
@@ -89,9 +87,10 @@ def find_black_bar(gray: np.ndarray) -> tuple[int, int] | None:
     """Return (y0, y1) of a solid black privacy bar, or None."""
     h, w = gray.shape
     row_dark = (gray < 28).mean(axis=1)
-    # Contiguous runs of mostly-black rows in the upper 70%
+    # Contiguous runs of mostly-black rows; top-down shots often place the eye
+    # bar low in frame, so inspect through 90% of the image.
     mask = row_dark > 0.55
-    mask[int(h * 0.72) :] = False
+    mask[int(h * 0.9) :] = False
     best = None
     i = 0
     while i < h:
@@ -102,9 +101,9 @@ def find_black_bar(gray: np.ndarray) -> tuple[int, int] | None:
         while j < h and mask[j]:
             j += 1
         if j - i >= max(18, int(h * 0.035)):
-            # Prefer bars in the eye band (roughly 25–55% of height)
+            # Privacy bars may sit low in top-down clinical photographs.
             mid = (i + j) / 2 / h
-            if 0.18 <= mid <= 0.62:
+            if 0.12 <= mid <= 0.86:
                 best = (i, j)
                 break
         i = j
@@ -345,18 +344,8 @@ def process_file(path: Path, out_name: str, focus: str = "scalp") -> Path:
     if bgr is None:
         raise RuntimeError(f"cannot read {path}")
     h, w = bgr.shape[:2]
-    # Portraits: retain the full face and shoulders; only trim edge clutter.
-    if focus == "portrait" and h > w:
-        top = int(h * 0.0)
-        bottom = int(h * 0.96)
-        side = int(w * 0.025)
-        bgr = bgr[top:bottom, side : w - side]
-        h, w = bgr.shape[:2]
-    elif focus == "scalp" and h >= w:
-        # Keep the clinical scalp band; drop busy lower furniture.
-        bottom = int(h * 0.62)
-        bgr = bgr[:bottom, :]
-        h, w = bgr.shape[:2]
+    # Never crop before privacy processing: preserve the full face and the
+    # clinic/environment exactly as photographed.
     max_side = 1600
     if max(h, w) > max_side:
         s = max_side / max(h, w)
@@ -367,10 +356,20 @@ def process_file(path: Path, out_name: str, focus: str = "scalp") -> Path:
     if bar:
         bgr, bar = replace_black_bar(bgr, bar)
     bar_center = (bar[0] + bar[1]) // 2 if bar else None
-    subject, crop = subject_rgba(bgr, bridge_subject=focus == "portrait")
-    stripe_y = bar_center - crop[1] if bar_center is not None else None
-    subject = privacy_on_rgba(subject, stripe_y)
-    final = composite_clinical(subject, focus=focus)
+    if bar_center is not None:
+        bgr = _privacy_stripe(bgr, bar_center)
+    else:
+        bgr = blur_eyes_haar(bgr)
+
+    # Cover-crop only at the final 4:5 boundary. Source photos are already
+    # portrait-oriented, so this trims side margins while retaining full faces.
+    rgb = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
+    final = ImageOps.fit(
+        Image.fromarray(rgb),
+        (OUT_W, OUT_H),
+        method=Image.Resampling.LANCZOS,
+        centering=(0.5, 0.5),
+    )
     out = LUXE / f"{out_name}.png"
     final.save(out, optimize=True)
     print(f"    wrote {out.relative_to(ROOT)} ({OUT_W}x{OUT_H})")

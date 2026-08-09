@@ -64,8 +64,8 @@ const SCALP_RATIO = 16 / 9;
 async function scalp(name, crop) {
   const file = src(name);
   const meta = await sharp(file).metadata();
-  // Luxe plates are already 1440×810 — just tune tone.
-  if (meta.width === 1440 && meta.height === 810) {
+  // Privacy-processed plates retain the original background at 4:5.
+  if (meta.width === 1080 && meta.height === 1350) {
     return sharp(file).modulate({ saturation: 1.02 }).linear(1.02, -2);
   }
   const { left, top, width, height } = crop;
@@ -111,7 +111,7 @@ img['result-frontal'] = await emit(await scalp('result-frontal', BAND), 'result-
   const file = src('eval-feminina');
   const meta = await sharp(file).metadata();
   const pipeline =
-    meta.width === 1440 && meta.height === 810
+    meta.width === 1080 && meta.height === 1350
       ? sharp(file).modulate({ saturation: 1.02 }).linear(1.02, -2)
       : sharp(file)
           .extract({ left: 300, top: 700, width: 2424, height: 2424 })

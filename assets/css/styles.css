@@ -785,7 +785,7 @@ strong {
 .split__media {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 4 / 5;
   border-radius: var(--radius-panel);
 }
 .split__media img {
@@ -867,7 +867,7 @@ strong {
 .card__media {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 4 / 5;
 }
 .card__media img {
   width: 100%;
@@ -965,7 +965,7 @@ strong {
 }
 .case__shot img {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 4 / 5;
   object-fit: cover;
   transition: transform 0.8s var(--ease);
 }

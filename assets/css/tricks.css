@@ -241,7 +241,7 @@
   position: relative;
   isolation: isolate;
   overflow: clip;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 4 / 5;
   background: var(--ink);
   touch-action: pan-y;
   user-select: none;
@@ -368,9 +368,9 @@
 }
 
 .coverflow__deck {
-  /* 16:9 clinical frames — height driven by media ratio, not a loose heuristic */
+  /* 4:5 portrait frames preserve the full face and original setting */
   --cover-w: min(28rem, 78vw);
-  --cover-h: calc(var(--cover-w) * 9 / 16);
+  --cover-h: calc(var(--cover-w) * 5 / 4);
   position: relative;
   inline-size: 100%;
   block-size: calc(var(--cover-h) + 5.5rem);
@@ -611,7 +611,7 @@
 .compare,
 .offer__media,
 .split__media {
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 4 / 5;
 }
 .card__media img,
 .offer__media img,
@@ -691,7 +691,7 @@
   border-color: var(--edge-gold);
 }
 #tratamentos .card__media {
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 4 / 5;
 }
 #tratamentos .card__media::after {
   content: '';
@@ -731,7 +731,7 @@
 .offer__media {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 4 / 5;
 }
 .offer__media img {
   inline-size: 100%;
