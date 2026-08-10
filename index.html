@@ -86,7 +86,8 @@
         "availableService": [
           { "@type": "MedicalProcedure", "name": "Transplante Capilar Masculino" },
           { "@type": "MedicalProcedure", "name": "MMP Capilar" },
-          { "@type": "Service", "name": "Avaliação Personalizada" }
+          { "@type": "Service", "name": "Avaliação Personalizada" },
+          { "@id": "https://www.drgabrielgaleb.com.br/#simulador-capilar-ia" }
         ]
       },
       {
@@ -108,6 +109,20 @@
           { "@type": "EducationalOccupationalCredential", "name": "Membro da Sociedade Brasileira de Cirurgia Capilar" }
         ],
         "sameAs": ["https://www.instagram.com/dr.gabrielgaleb"]
+      },
+      {
+        "@type": "Service",
+        "@id": "https://www.drgabrielgaleb.com.br/#simulador-capilar-ia",
+        "name": "Simulador Capilar IA — experiência visual ilustrativa",
+        "serviceType": "Simulação visual capilar com inteligência artificial",
+        "description": "Experiência privada e ilustrativa para visualizar possibilidades estéticas antes de uma avaliação médica. Não realiza diagnóstico, indicação de tratamento ou previsão de resultado.",
+        "provider": { "@id": "https://www.drgabrielgaleb.com.br/#physician" },
+        "areaServed": [
+          { "@type": "Place", "name": "Alphaville" },
+          { "@type": "City", "name": "Barueri" },
+          { "@type": "State", "name": "São Paulo" }
+        ],
+        "url": "https://www.drgabrielgaleb.com.br/#simulador"
       },
       {
         "@type": "WebSite",
@@ -154,6 +169,7 @@
           <li><a href="#sobre" data-i18n="nav.doctor">O Médico</a></li>
           <li><a href="#solucoes" data-i18n="nav.solutions">Soluções</a></li>
           <li><a href="#resultados" data-i18n="nav.results">Resultados</a></li>
+          <li><a href="#simulador" data-i18n="nav.simulator">Simulador IA</a></li>
           <li><a href="#processo" data-i18n="nav.journey">Jornada</a></li>
           <li><a href="#depoimentos" data-i18n="nav.testimonials">Depoimentos</a></li>
           <li><a href="#contato" data-i18n="nav.contact">Contato</a></li>
@@ -385,6 +401,44 @@
           </figure>
         </div>
         <p class="results-note" data-i18n="results.note">Cada organismo responde de forma individual. A avaliação médica é essencial para entender as possibilidades de cada caso.</p>
+      </div>
+    </section>
+
+    <section id="simulador" class="ai-launch" aria-labelledby="ai-launch-title">
+      <div class="container ai-launch-grid">
+        <div class="ai-launch-copy">
+          <span class="ai-launch-badge" data-i18n="simulator.badge">Nova tecnologia</span>
+          <span class="eyebrow" data-i18n="simulator.eyebrow">Simulador Capilar IA</span>
+          <h2 id="ai-launch-title" data-i18n-html="simulator.title">Veja uma possibilidade<br><em>antes da sua avaliação.</em></h2>
+          <p class="ai-launch-lead" data-i18n="simulator.body">Conheça a nova experiência de simulação visual do Dr. Gabriel Galeb. Em um acesso individual e protegido, envie uma fotografia, explore até cinco prévias personalizadas e compartilhe seu interesse com a equipe.</p>
+
+          <div class="ai-launch-benefits" role="list">
+            <div role="listitem"><span aria-hidden="true">01</span><strong data-i18n="simulator.benefitAccount">Cadastro com solicitação de contato</strong></div>
+            <div role="listitem"><span aria-hidden="true">02</span><strong data-i18n="simulator.benefitUses">Até cinco simulações por conta</strong></div>
+            <div role="listitem"><span aria-hidden="true">03</span><strong data-i18n="simulator.benefitPrivacy">Imagens privadas e protegidas</strong></div>
+          </div>
+
+          <div class="ai-launch-actions">
+            <a href="https://gabriel-hair-simulator.onrender.com/" class="btn btn-gold btn-arrow" target="_blank" rel="noopener noreferrer" data-i18n="simulator.cta">Criar minha simulação</a>
+            <span data-i18n="simulator.opensTab">Abre em uma nova aba segura</span>
+          </div>
+          <p class="ai-launch-note" data-i18n="simulator.disclaimer">A simulação é ilustrativa, não substitui avaliação médica e não representa previsão ou garantia de resultado. O cadastro é necessário antes do uso.</p>
+        </div>
+
+        <figure class="ai-launch-preview">
+          <div class="ai-preview-header">
+            <span><i aria-hidden="true"></i><span data-i18n="simulator.previewPrivate">Acesso individual</span></span>
+            <strong>0 <small>/ 5</small></strong>
+          </div>
+          <div class="ai-preview-portrait">
+            <img src="/assets/img/simulator-profile.webp" width="1024" height="1024" alt="Representação gráfica da experiência de simulação capilar" data-i18n-alt="simulator.previewAlt" loading="lazy" decoding="async">
+            <span data-i18n="simulator.previewLabel">Prévia visual ilustrativa</span>
+          </div>
+          <div class="ai-preview-controls" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </div>
+          <figcaption data-i18n="simulator.previewCaption">Representação da experiência digital. A prévia real é criada a partir da fotografia enviada pelo próprio usuário.</figcaption>
+        </figure>
       </div>
     </section>
 

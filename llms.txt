@@ -20,12 +20,14 @@ Available interface languages: Portuguese, Spanish, English
 - Transplante Capilar Masculino com técnica FUE
 - MMP Capilar
 - Avaliação Personalizada
+- Simulador Capilar IA: experiência visual ilustrativa, com cadastro individual, solicitação de contato e até cinco simulações por conta. A ferramenta não realiza diagnóstico, indicação de tratamento, previsão ou garantia de resultado.
 
 ## Experiência
 
 - Mais de 1.000 procedimentos
 - Mais de 10 anos de experiência
 - O site apresenta seis pares de fotografias reais de antes e depois e uma galeria somente com resultados posteriores.
+- O site apresenta o acesso ao Simulador Capilar IA em uma aba separada e protegida. As imagens do simulador não são públicas nem indexáveis.
 
 ## Localização e contato
 
