@@ -159,6 +159,7 @@ async function auditCoreExperience(page, baseUrl) {
   check('structured-data-no-unverified-hours', !structuredData.includes('openingHours'));
   check('structured-data-locality', structuredData.includes('"addressLocality": "Barueri"'));
   check('structured-data-service-area', structuredData.includes('"name": "Alphaville"') && structuredData.includes('"name": "Grande São Paulo"'));
+  check('structured-data-ai-simulator', Boolean(schema?.['@graph']?.find((node) => node['@id'] === 'https://www.drgabrielgaleb.com.br/#simulador-capilar-ia' && node['@type'] === 'Service')));
 
   const robots = await readFile(path.join(ROOT, 'robots.txt'), 'utf8');
   const sitemap = await readFile(path.join(ROOT, 'sitemap.xml'), 'utf8');
@@ -166,9 +167,9 @@ async function auditCoreExperience(page, baseUrl) {
   check('robots-search-crawlers', robots.includes('OAI-SearchBot') && robots.includes('Googlebot'));
   check('robots-sitemap', robots.includes('Sitemap: https://www.drgabrielgaleb.com.br/sitemap.xml'));
   check('image-sitemap', (sitemap.match(/<image:loc>/g) || []).length === 9, (sitemap.match(/<image:loc>/g) || []).length);
-  check('llms-discovery-file', llms.includes('Alphaville, Barueri') && llms.includes('Transplante Capilar Masculino'));
+  check('llms-discovery-file', llms.includes('Alphaville, Barueri') && llms.includes('Transplante Capilar Masculino') && llms.includes('Simulador Capilar IA'));
 
-  const requiredSections = ['.topbar', '.nav', '.hero', '#sobre', '#solucoes', '#resultados', '.diffs-section', '#processo', '#depoimentos', '#contato', 'footer'];
+  const requiredSections = ['.topbar', '.nav', '.hero', '#sobre', '#solucoes', '#resultados', '#simulador', '.diffs-section', '#processo', '#depoimentos', '#contato', 'footer'];
   for (const selector of requiredSections) {
     check(`section:${selector}`, await page.locator(selector).first().isVisible());
   }
@@ -181,6 +182,10 @@ async function auditCoreExperience(page, baseUrl) {
 
   const gallerySources = await page.locator('.after-gallery img').evaluateAll((images) => images.map((image) => image.getAttribute('src')));
   check('after-gallery-only-after', gallerySources.every((source) => /case-\d{2}-after\.webp$/.test(source)), gallerySources);
+  const simulatorLink = page.locator('#simulador a[href*="gabriel-hair-simulator"]');
+  check('simulator-link-visible', await simulatorLink.isVisible());
+  check('simulator-link-new-tab', await simulatorLink.getAttribute('target') === '_blank');
+  check('simulator-link-no-opener', (await simulatorLink.getAttribute('rel'))?.includes('noopener'));
 
   const geometry = await page.locator('.comparison-frame').evaluate((frame) => {
     const before = frame.querySelector('.comparison-image--before').getBoundingClientRect();
@@ -243,18 +248,20 @@ async function auditCoreExperience(page, baseUrl) {
   check('spanish-html-lang', await page.locator('html').getAttribute('lang') === 'es');
   check('spanish-hero', (await page.locator('#hero-title').innerText()).includes('Recupera tu confianza'));
   check('spanish-whatsapp', decodeURIComponent(await page.locator('[data-wa="schedule"]').first().getAttribute('href')).includes('Hola Dr. Gabriel'));
+  check('spanish-simulator-copy', (await page.locator('#simulador').innerText()).toLowerCase().includes('nueva tecnología'));
 
   await page.locator('[data-lang="en"]').click();
   check('english-html-lang', await page.locator('html').getAttribute('lang') === 'en');
   check('english-hero', (await page.locator('#hero-title').innerText()).includes('Restore your confidence'));
   check('english-gallery-copy', (await page.locator('.after-gallery-heading').innerText()).includes('after images'));
+  check('english-simulator-copy', (await page.locator('#simulador').innerText()).toLowerCase().includes('new technology'));
 
   await page.locator('[data-lang="pt"]').click();
   check('portuguese-restored', await page.locator('html').getAttribute('lang') === 'pt-BR');
 
   const missingTranslations = await page.locator('[data-i18n], [data-i18n-html], [data-i18n-aria], [data-i18n-alt]').evaluateAll((elements) => elements.filter((element) => {
     const value = element.textContent || element.getAttribute('aria-label') || element.getAttribute('alt') || '';
-    return !value.trim() || /^(accessibility|actions|about|brand|cta|diffs|doctor|footer|gallery|hero|images|journey|nav|results|services|stats|testimonials|topbar)\./.test(value.trim());
+    return !value.trim() || /^(accessibility|actions|about|brand|cta|diffs|doctor|footer|gallery|hero|images|journey|nav|results|services|simulator|stats|testimonials|topbar)\./.test(value.trim());
   }).length);
   check('translations-complete', missingTranslations === 0, missingTranslations);
 }
@@ -326,6 +333,7 @@ try {
   browser = await chromium.launch({
     headless: true,
     executablePath,
+    ignoreDefaultArgs: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH ? ['--disable-dev-shm-usage'] : undefined,
     args: browserArgs,
   });
   const context = await browser.newContext({ colorScheme: 'dark', reducedMotion: 'reduce' });
