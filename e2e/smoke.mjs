@@ -182,7 +182,7 @@ async function auditCoreExperience(page, baseUrl) {
 
   const gallerySources = await page.locator('.after-gallery img').evaluateAll((images) => images.map((image) => image.getAttribute('src')));
   check('after-gallery-only-after', gallerySources.every((source) => /case-\d{2}-after\.webp$/.test(source)), gallerySources);
-  const simulatorLink = page.locator('#simulador a[href*="gabriel-hair-simulator"]');
+  const simulatorLink = page.locator('#simulador a[href="https://tanah-hair-gen-gmq6b.ondigitalocean.app/"]');
   check('simulator-link-visible', await simulatorLink.isVisible());
   check('simulator-link-new-tab', await simulatorLink.getAttribute('target') === '_blank');
   check('simulator-link-no-opener', (await simulatorLink.getAttribute('rel'))?.includes('noopener'));
